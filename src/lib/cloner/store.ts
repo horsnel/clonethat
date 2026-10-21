@@ -13,8 +13,19 @@ function cloneDir(id: string): string {
 export async function saveClone(result: CloneResult): Promise<void> {
   const dir = cloneDir(result.meta.id)
   await mkdir(path.join(dir, 'assets'), { recursive: true })
-  await writeFile(path.join(dir, 'single.html'), Buffer.from(result.singleHtml, 'utf8'))
+  await mkdir(path.join(dir, 'single'), { recursive: true })
+  await mkdir(path.join(dir, 'shots'), { recursive: true })
+
+  for (const [slug, html] of result.singles.entries()) {
+    if (!/^[a-z0-9-]+$/i.test(slug)) continue
+    await writeFile(path.join(dir, 'single', `${slug}.html`), Buffer.from(html, 'utf8'))
+  }
+  for (const [slug, buf] of result.shots.entries()) {
+    if (!/^[a-z0-9-]+\.png$/i.test(slug)) continue
+    await writeFile(path.join(dir, 'shots', slug), buf)
+  }
   for (const [rel, buf] of result.files.entries()) {
+    if (rel.includes('..')) continue
     const target = path.join(dir, 'mirror', rel)
     await mkdir(path.dirname(target), { recursive: true })
     await writeFile(target, buf)
@@ -22,9 +33,22 @@ export async function saveClone(result: CloneResult): Promise<void> {
   await writeFile(path.join(dir, 'meta.json'), JSON.stringify(result.meta, null, 2))
 }
 
-export async function readSingleHtml(id: string): Promise<string | null> {
+function safeSlug(slug: string | null): string {
+  if (!slug) return 'index'
+  return /^[a-z0-9-]+$/i.test(slug) ? slug : 'index'
+}
+
+export async function readSingleHtml(id: string, page?: string | null): Promise<string | null> {
   try {
-    return await readFile(path.join(cloneDir(id), 'single.html'), 'utf8')
+    return await readFile(path.join(cloneDir(id), 'single', `${safeSlug(page ?? 'index')}.html`), 'utf8')
+  } catch {
+    return null
+  }
+}
+
+export async function readShot(id: string, page?: string | null): Promise<Buffer | null> {
+  try {
+    return await readFile(path.join(cloneDir(id), 'shots', `${safeSlug(page ?? 'index')}.png`))
   } catch {
     return null
   }
@@ -64,7 +88,18 @@ export async function readMirrorFiles(id: string): Promise<Map<string, Buffer> |
   }
 
   await walk(mirrorRoot, '')
-  return out.size > 0 ? out : null
+  if (out.size === 0) return null
+
+  // include reference screenshots under a dedicated folder for verification
+  try {
+    const shotFiles = await readdir(path.join(cloneDir(id), 'shots'))
+    for (const f of shotFiles) {
+      if (!f.endsWith('.png')) continue
+      out.set(`_screenshots/${f}`, await readFile(path.join(cloneDir(id), 'shots', f)))
+    }
+  } catch { /* optional */ }
+
+  return out
 }
 
 export interface CloneListItem {
@@ -76,6 +111,8 @@ export interface CloneListItem {
   totalBytes: number
   requests: number
   stackCount: number
+  pageCount: number
+  rendered: boolean
 }
 
 export async function listClones(limit = 12): Promise<CloneListItem[]> {
@@ -102,6 +139,8 @@ export async function listClones(limit = 12): Promise<CloneListItem[]> {
         totalBytes: meta.stats.totalBytes,
         requests: meta.stats.requests,
         stackCount: meta.analysis.stack.length,
+        pageCount: meta.pages?.length ?? 1,
+        rendered: meta.rendered,
       })
     } catch { /* skip broken entries */ }
   }

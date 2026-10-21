@@ -8,48 +8,53 @@ import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from '@/components/ui/tooltip'
 import {
-  Hammer, PackageOpen, ScanSearch, Sparkles, Globe, Zap, Loader2,
+  Hammer, PackageOpen, ScanSearch, Sparkles, Globe, Zap, Loader2, Cpu, FileCode2, Wand2, Link2,
 } from 'lucide-react'
+import type { RenderModeUi } from './shared'
 
 interface HeroProps {
   loading: boolean
-  onClone: (url: string, keepScripts: boolean) => void
+  onClone: (url: string, opts: { keepScripts: boolean; renderMode: RenderModeUi; crawl: boolean }) => void
   initialUrl?: string
 }
 
 const EXAMPLES = [
+  'famsuptasks.com/register',
   'books.toscrape.com',
   'quotes.toscrape.com',
   'example.com',
-  'info.cern.ch',
 ]
 
 const FEATURES = [
   {
-    icon: Zap,
-    title: 'Deep asset cloning',
-    desc: 'Every image, stylesheet, font and lazy-loaded asset is downloaded, deduped and rewritten — nothing left behind on the origin server.',
+    icon: Wand2,
+    title: 'Headless browser rendering',
+    desc: 'A real Chromium engine loads the page, runs every script, and captures the DOM exactly as users see it — SPAs, modals and all.',
   },
   {
     icon: ScanSearch,
-    title: 'Stack & design analysis',
-    desc: 'Detects 45+ frameworks, CMSs and trackers. Extracts the color palette and font stack straight from the site\'s CSS.',
+    title: 'Interaction replay & analysis',
+    desc: 'The engine clicks Sign Up / Log In style CTAs to capture hidden states, detects 45+ technologies, and extracts palette + fonts from CSS.',
   },
   {
     icon: PackageOpen,
-    title: 'One-click export',
-    desc: 'Download a single portable HTML file with everything inlined, or a full mirror ZIP ready to deploy on any static host.',
+    title: 'Multi-page, deploy-ready export',
+    desc: 'Crawls same-origin links, rewrites navigation between cloned pages, and ships a single-file HTML or full mirror ZIP.',
   },
 ]
 
 export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
   const [url, setUrl] = useState(initialUrl)
   const [keepScripts, setKeepScripts] = useState(false)
+  const [crawl, setCrawl] = useState(true)
+  const [renderMode, setRenderMode] = useState<RenderModeUi>('auto')
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (url.trim() && !loading) onClone(url.trim(), keepScripts)
+    if (url.trim() && !loading) onClone(url.trim(), { keepScripts, renderMode, crawl })
   }
 
   return (
@@ -71,18 +76,18 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
         >
           <Badge variant="outline" className="mb-5 gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-300">
             <Sparkles className="h-3 w-3" aria-hidden />
-            Deep cloning engine · 45+ stack signatures
+            Chromium rendering · interaction replay · multi-page crawl
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-6xl">
             Clone any website.
             <br />
             <span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-lime-200 bg-clip-text text-transparent">
-              In seconds.
+              Even the JavaScript.
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-base text-zinc-400 sm:text-lg">
-            Paste a URL — CloneForge downloads every asset, rewrites all references,
-            analyzes the tech stack and hands you a ready-to-deploy copy.
+            CloneForge renders pages in a real browser, replays interactions to capture hidden UI,
+            crawls linked pages and hands you a ready-to-deploy copy.
           </p>
         </motion.div>
 
@@ -122,31 +127,64 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
             </Button>
           </div>
 
-          <div className="mt-4 flex flex-col items-center justify-center gap-3 sm:flex-row">
-            <div className="flex items-center gap-2.5 rounded-full border border-zinc-800 bg-zinc-900/60 px-4 py-1.5">
-              <Switch
-                id="keep-scripts"
-                checked={keepScripts}
-                onCheckedChange={setKeepScripts}
-                aria-label="Run JavaScript in the clone"
-              />
-              <Label htmlFor="keep-scripts" className="cursor-pointer text-xs text-zinc-400">
-                Run JavaScript <span className="text-zinc-600">(for JS-rendered sites)</span>
-              </Label>
-            </div>
-            <div className="flex flex-wrap items-center justify-center gap-1.5">
-              <span className="text-xs text-zinc-600">Try:</span>
-              {EXAMPLES.map((ex) => (
-                <button
-                  key={ex}
-                  type="button"
-                  onClick={() => setUrl(ex)}
-                  className="rounded-full border border-zinc-800 bg-zinc-900/60 px-2.5 py-1 font-mono text-xs text-zinc-400 transition-colors hover:border-emerald-500/40 hover:text-emerald-300"
-                >
-                  {ex}
-                </button>
-              ))}
-            </div>
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
+            <TooltipProvider delayDuration={200}>
+              <Tooltip>
+                <TooltipTrigger asChild>
+                  <div>
+                    <Select value={renderMode} onValueChange={(v) => setRenderMode(v as RenderModeUi)}>
+                      <SelectTrigger
+                        aria-label="Rendering engine"
+                        className="h-9 w-[190px] gap-2 border-zinc-800 bg-zinc-900/60 text-xs text-zinc-300"
+                      >
+                        <Cpu className="h-3.5 w-3.5 text-emerald-400" aria-hidden />
+                        <SelectValue />
+                      </SelectTrigger>
+                      <SelectContent className="border-zinc-800 bg-zinc-900 text-zinc-200">
+                        <SelectItem value="auto">
+                          <span className="flex items-center gap-2"><Wand2 className="h-3.5 w-3.5 text-emerald-400" />Auto — smart escalate</span>
+                        </SelectItem>
+                        <SelectItem value="browser">
+                          <span className="flex items-center gap-2"><Cpu className="h-3.5 w-3.5 text-emerald-400" />Always render (Chromium)</span>
+                        </SelectItem>
+                        <SelectItem value="static">
+                          <span className="flex items-center gap-2"><FileCode2 className="h-3.5 w-3.5 text-emerald-400" />Fast static HTML</span>
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                </TooltipTrigger>
+                <TooltipContent side="bottom" className="bg-zinc-900 border-zinc-800 text-zinc-200">
+                  Auto tries fast static fetch, escalates to a real browser when the page needs JavaScript
+                </TooltipContent>
+              </Tooltip>
+            </TooltipProvider>
+
+            <label className="flex cursor-pointer items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/60 px-3.5 py-2">
+              <Switch id="crawl" checked={crawl} onCheckedChange={setCrawl} aria-label="Crawl linked pages" />
+              <span className="flex items-center gap-1.5 text-xs text-zinc-400">
+                <Link2 className="h-3 w-3" aria-hidden /> Crawl linked pages
+              </span>
+            </label>
+
+            <label className="flex cursor-pointer items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/60 px-3.5 py-2">
+              <Switch id="keep-scripts-hero" checked={keepScripts} onCheckedChange={setKeepScripts} aria-label="Run JavaScript in the clone" />
+              <span className="text-xs text-zinc-400">Run JS in clone</span>
+            </label>
+          </div>
+
+          <div className="mt-4 flex flex-wrap items-center justify-center gap-1.5">
+            <span className="text-xs text-zinc-600">Try:</span>
+            {EXAMPLES.map((ex) => (
+              <button
+                key={ex}
+                type="button"
+                onClick={() => setUrl(ex)}
+                className="rounded-full border border-zinc-800 bg-zinc-900/60 px-2.5 py-1 font-mono text-xs text-zinc-400 transition-colors hover:border-emerald-500/40 hover:text-emerald-300"
+              >
+                {ex}
+              </button>
+            ))}
           </div>
         </motion.form>
       </div>

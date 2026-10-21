@@ -19,7 +19,11 @@ export interface CloneListItem {
   totalBytes: number
   requests: number
   stackCount: number
+  pageCount: number
+  rendered: boolean
 }
+
+export type RenderModeUi = 'auto' | 'browser' | 'static'
 
 export function formatBytes(bytes: number): string {
   if (!Number.isFinite(bytes) || bytes <= 0) return '0 B'

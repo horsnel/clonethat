@@ -4,11 +4,12 @@ import { readSingleHtml } from '@/lib/cloner/store'
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
 
-export async function GET(_req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
+export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params
-  const html = await readSingleHtml(id)
+  const page = req.nextUrl.searchParams.get('page')
+  const html = await readSingleHtml(id, page)
   if (html === null) {
-    return NextResponse.json({ error: 'Clone not found or expired.' }, { status: 404 })
+    return NextResponse.json({ error: 'Clone page not found or expired.' }, { status: 404 })
   }
   return new NextResponse(html, {
     headers: {

@@ -1,0 +1,201 @@
+{
+  "id": "3c4710046f0c",
+  "sourceUrl": "https://famsuptasks.com/register",
+  "finalUrl": "https://famsuptasks.com/register",
+  "title": "FamsUpTasks : Earn money by completing social Media Tasks",
+  "keepScripts": false,
+  "createdAt": 1792621731588,
+  "renderMode": "browser",
+  "rendered": true,
+  "autoHealed": null,
+  "warnings": [],
+  "robotsRestricted": false,
+  "analysis": {
+    "title": "FamsUpTasks : Earn money by completing social Media Tasks",
+    "description": "",
+    "lang": "en",
+    "ogImage": "",
+    "favicon": "https://famsuptasks.com/favicon-32x32.png",
+    "finalUrl": "https://famsuptasks.com/register",
+    "stack": [
+      {
+        "name": "Svelte",
+        "category": "framework"
+      },
+      {
+        "name": "Meta Pixel",
+        "category": "analytics"
+      },
+      {
+        "name": "Cloudflare Insights",
+        "category": "analytics"
+      },
+      {
+        "name": "Cloudflare",
+        "category": "infra"
+      }
+    ],
+    "colors": [
+      {
+        "hex": "#ff7300",
+        "count": 20
+      },
+      {
+        "hex": "#d0d5dd",
+        "count": 10
+      },
+      {
+        "hex": "#101828",
+        "count": 10
+      },
+      {
+        "hex": "#f3f3f3",
+        "count": 8
+      },
+      {
+        "hex": "#080302",
+        "count": 7
+      },
+      {
+        "hex": "#d92d20",
+        "count": 6
+      },
+      {
+        "hex": "#b54708",
+        "count": 4
+      },
+      {
+        "hex": "#ffe4cc",
+        "count": 4
+      },
+      {
+        "hex": "#666666",
+        "count": 4
+      },
+      {
+        "hex": "#999999",
+        "count": 4
+      },
+      {
+        "hex": "#b42318",
+        "count": 4
+      },
+      {
+        "hex": "#a6f4c5",
+        "count": 2
+      }
+    ],
+    "fonts": [
+      {
+        "family": "ZT Nature",
+        "count": 4
+      }
+    ],
+    "jsRendered": false
+  },
+  "stats": {
+    "htmlBytes": 9613,
+    "singleBytes": 426707,
+    "totalBytes": 336570,
+    "requests": 10,
+    "counts": {
+      "image": 5,
+      "style": 1,
+      "script": 0,
+      "font": 3,
+      "media": 0,
+      "icon": 0,
+      "other": 0
+    },
+    "domains": [
+      "famsuptasks.com",
+      "pwa.xyz"
+    ],
+    "textLength": 14,
+    "durationMs": 4831
+  },
+  "assets": [
+    {
+      "url": "https://famsuptasks.com/_app/immutable/assets/0.q2KP8T-D.css",
+      "path": "assets/e7ece8cdd8a2.css",
+      "type": "style",
+      "size": 42890,
+      "ext": "css",
+      "inlined": false
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-BoldItalic.otf",
+      "path": "assets/3fcd4863efdc.otf",
+      "type": "font",
+      "size": 60192,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-Bold.otf",
+      "path": "assets/6762dfc785c1.otf",
+      "type": "font",
+      "size": 57464,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-Regular.otf",
+      "path": "assets/494ff8a650b4.otf",
+      "type": "font",
+      "size": 54688,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/_app/immutable/assets/logo.CPC0XGHD.png",
+      "path": "assets/e050137dcb0b.png",
+      "type": "image",
+      "size": 51182,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/favicon.png",
+      "path": "assets/f216a80c316a.png",
+      "type": "image",
+      "size": 51182,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://pwa.xyz/JAcg9rgUQcw6HNKgu1AM%2FAdjEmpeXCuJgcSo.png?alt=media&token=3b87256c-9a1d-4ea2-85cc-e96a17549e24",
+      "path": "assets/57d1cbc3755d.png",
+      "type": "image",
+      "size": 8143,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/favicon-32x32.png",
+      "path": "assets/83ef1bbe570c.png",
+      "type": "image",
+      "size": 779,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/favicon-16x16.png",
+      "path": "assets/cf3027b386f5.png",
+      "type": "image",
+      "size": 437,
+      "ext": "png",
+      "inlined": true
+    }
+  ],
+  "pages": [
+    {
+      "slug": "index",
+      "title": "FamsUpTasks : Earn money by completing social Media Tasks",
+      "sourceUrl": "https://famsuptasks.com/register",
+      "kind": "entry",
+      "hasScreenshot": true,
+      "textLength": 14
+    }
+  ]
+}

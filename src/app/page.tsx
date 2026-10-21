@@ -5,7 +5,7 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { Hero } from '@/components/cloner/hero'
 import { Workspace } from '@/components/cloner/workspace'
-import type { CloneResponse, CloneListItem } from '@/components/cloner/shared'
+import type { CloneResponse, CloneListItem, RenderModeUi } from '@/components/cloner/shared'
 import { formatBytes, formatDate, hostnameOf } from '@/components/cloner/shared'
 import { Check, Globe, History, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react'
 
@@ -13,10 +13,10 @@ type View = { kind: 'idle' } | { kind: 'cloning' } | { kind: 'done'; result: Clo
 
 const STEPS = [
   'Fetching page & following redirects',
-  'Downloading images, fonts & stylesheets',
-  'Rewriting URLs & inlining assets',
-  'Analyzing tech stack & design tokens',
-  'Packaging single-file and mirror exports',
+  'Rendering in headless Chromium (JS executed)',
+  'Replaying interactions to capture hidden UI',
+  'Crawling linked pages & downloading assets',
+  'Rewriting URLs, analyzing stack & packaging',
 ]
 
 export default function Home() {
@@ -47,11 +47,14 @@ export default function Home() {
     setProgressStep(0)
     const timer = setInterval(() => {
       setProgressStep((s) => Math.min(s + 1, STEPS.length - 2))
-    }, 1600)
+    }, 2200)
     return () => clearInterval(timer)
   }, [view.kind])
 
-  const clone = useCallback(async (url: string, keepScripts: boolean) => {
+  const clone = useCallback(async (
+    url: string,
+    opts: { keepScripts: boolean; renderMode: RenderModeUi; crawl: boolean }
+  ) => {
     lastUrl.current = url
     setError(null)
     setView({ kind: 'cloning' })
@@ -59,7 +62,12 @@ export default function Home() {
       const res = await fetch('/api/clone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ url, keepScripts }),
+        body: JSON.stringify({
+          url,
+          keepScripts: opts.keepScripts,
+          renderMode: opts.renderMode,
+          crawl: opts.crawl,
+        }),
       })
       const data = (await res.json()) as CloneResponse
       if (!res.ok || !data.ok) {
@@ -67,7 +75,10 @@ export default function Home() {
       }
       setView({ kind: 'done', result: data })
       loadHistory()
-      toast.success(`Cloned ${hostnameOf(data.meta.finalUrl)} — ${data.meta.stats.requests} requests captured`)
+      const captures = data.meta.pages?.length ?? 1
+      toast.success(
+        `Cloned ${hostnameOf(data.meta.finalUrl)} — ${data.meta.stats.requests} requests, ${captures} capture${captures > 1 ? 's' : ''}`
+      )
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong while cloning.'
       setError(message)
@@ -101,7 +112,6 @@ export default function Home() {
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
-      {/* header */}
       <header className="sticky top-0 z-40 border-b border-zinc-800/80 bg-zinc-950/85 backdrop-blur">
         <div className="mx-auto flex h-14 w-full max-w-7xl items-center justify-between px-4">
           <button
@@ -114,7 +124,7 @@ export default function Home() {
             </span>
             <span className="text-base font-bold tracking-tight">CloneForge</span>
             <span className="rounded-full border border-zinc-700 px-1.5 py-0.5 text-[10px] font-medium text-zinc-400">
-              beta
+              v2
             </span>
           </button>
           <div className="flex items-center gap-1.5 text-xs text-zinc-500">
@@ -150,7 +160,7 @@ export default function Home() {
               <Loader2 className="h-8 w-8 animate-spin text-emerald-400" aria-hidden />
             </div>
             <h2 className="text-lg font-semibold">Cloning {hostnameOf(lastUrl.current)}…</h2>
-            <p className="mt-1 text-sm text-zinc-500">Large sites can take up to a minute.</p>
+            <p className="mt-1 text-sm text-zinc-500">Browser rendering takes a little longer — usually 15–60s.</p>
             <ol className="mt-8 w-full space-y-3">
               {STEPS.map((step, i) => {
                 const state = i < progressStep ? 'done' : i === progressStep ? 'active' : 'pending'
@@ -189,10 +199,10 @@ export default function Home() {
       <footer className="mt-auto border-t border-zinc-800/80 bg-zinc-950 pb-[env(safe-area-inset-bottom)]">
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-zinc-600 sm:flex-row">
           <p>
-            <span className="font-semibold text-zinc-500">CloneForge</span> — built for prototyping, archiving and
+            <span className="font-semibold text-zinc-500">CloneForge v2</span> — built for prototyping, archiving and
             learning. Only clone sites you own or have permission to use.
           </p>
-          <p className="font-mono text-[10px]">Next.js 16 · assets served locally · exports are static HTML</p>
+          <p className="font-mono text-[10px]">Next.js 16 · Chromium rendering · static exports</p>
         </div>
       </footer>
     </div>
@@ -230,7 +240,19 @@ function HistoryStrip({
               onClick={() => onOpen(c.id)}
               className="group rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-left transition-colors hover:border-emerald-500/40 hover:bg-zinc-900"
             >
-              <p className="truncate text-sm font-medium text-zinc-200 group-hover:text-emerald-300">{c.title}</p>
+              <div className="flex items-center gap-1.5">
+                {c.rendered && (
+                  <span className="rounded border border-teal-500/40 bg-teal-500/10 px-1 py-0.5 text-[9px] font-medium text-teal-300">
+                    RENDERED
+                  </span>
+                )}
+                {c.pageCount > 1 && (
+                  <span className="rounded border border-zinc-700 px-1 py-0.5 text-[9px] text-zinc-400">
+                    {c.pageCount} captures
+                  </span>
+                )}
+              </div>
+              <p className="mt-1.5 truncate text-sm font-medium text-zinc-200 group-hover:text-emerald-300">{c.title}</p>
               <p className="mt-0.5 truncate font-mono text-[11px] text-zinc-500">{hostnameOf(c.finalUrl)}</p>
               <div className="mt-2.5 flex items-center gap-2 text-[10px] text-zinc-600">
                 <span>{formatBytes(c.totalBytes)}</span>

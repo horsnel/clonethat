@@ -2,14 +2,16 @@ import { NextRequest, NextResponse } from 'next/server'
 import { cloneSite } from '@/lib/cloner/rewriter'
 import { saveClone } from '@/lib/cloner/store'
 import { validateTargetUrl } from '@/lib/cloner/fetcher'
+import type { RenderMode } from '@/lib/cloner/types'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
+export const maxDuration = 300
 
 const HTML_PREVIEW_CAP = 300_000
 
 export async function POST(req: NextRequest) {
-  let body: { url?: string; keepScripts?: boolean }
+  let body: { url?: string; keepScripts?: boolean; renderMode?: string; crawl?: boolean }
   try {
     body = await req.json()
   } catch {
@@ -20,9 +22,16 @@ export async function POST(req: NextRequest) {
   if (!url) {
     return NextResponse.json({ ok: false, error: error ?? 'Invalid URL.' }, { status: 400 })
   }
+  const renderMode: RenderMode =
+    body.renderMode === 'static' || body.renderMode === 'browser' ? body.renderMode : 'auto'
 
   try {
-    const result = await cloneSite({ url, keepScripts: Boolean(body.keepScripts) })
+    const result = await cloneSite({
+      url,
+      keepScripts: Boolean(body.keepScripts),
+      renderMode,
+      crawl: body.crawl !== false,
+    })
     await saveClone(result)
     return NextResponse.json({
       ok: true,

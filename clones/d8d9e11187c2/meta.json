@@ -1,0 +1,307 @@
+{
+  "id": "d8d9e11187c2",
+  "sourceUrl": "https://famsuptasks.com/register",
+  "finalUrl": "https://famsuptasks.com/",
+  "title": "FamsUpTasks : Earn money by completing social Media Tasks",
+  "keepScripts": false,
+  "createdAt": 1792621902842,
+  "renderMode": "browser",
+  "rendered": true,
+  "autoHealed": {
+    "from": "https://famsuptasks.com/register",
+    "to": "https://famsuptasks.com/",
+    "note": "The requested URL renders a \"404 Not Found\" view, so the engine cloned the site root instead — its interactive states (sign-up modals etc.) are included below."
+  },
+  "warnings": [],
+  "robotsRestricted": false,
+  "analysis": {
+    "title": "FamsUpTasks : Earn money by completing social Media Tasks",
+    "description": "",
+    "lang": "en",
+    "ogImage": "",
+    "favicon": "https://famsuptasks.com/favicon-32x32.png",
+    "finalUrl": "https://famsuptasks.com/",
+    "stack": [
+      {
+        "name": "Svelte",
+        "category": "framework"
+      },
+      {
+        "name": "Tailwind CSS",
+        "category": "css"
+      },
+      {
+        "name": "Meta Pixel",
+        "category": "analytics"
+      },
+      {
+        "name": "Cloudflare Insights",
+        "category": "analytics"
+      },
+      {
+        "name": "Cloudflare",
+        "category": "infra"
+      }
+    ],
+    "colors": [
+      {
+        "hex": "#ff7300",
+        "count": 20
+      },
+      {
+        "hex": "#d0d5dd",
+        "count": 10
+      },
+      {
+        "hex": "#101828",
+        "count": 10
+      },
+      {
+        "hex": "#f3f3f3",
+        "count": 8
+      },
+      {
+        "hex": "#080302",
+        "count": 7
+      },
+      {
+        "hex": "#d92d20",
+        "count": 6
+      },
+      {
+        "hex": "#b54708",
+        "count": 4
+      },
+      {
+        "hex": "#ffe4cc",
+        "count": 4
+      },
+      {
+        "hex": "#666666",
+        "count": 4
+      },
+      {
+        "hex": "#999999",
+        "count": 4
+      },
+      {
+        "hex": "#b42318",
+        "count": 4
+      },
+      {
+        "hex": "#a6f4c5",
+        "count": 2
+      }
+    ],
+    "fonts": [
+      {
+        "family": "ZT Nature",
+        "count": 4
+      }
+    ],
+    "jsRendered": false
+  },
+  "stats": {
+    "htmlBytes": 120424,
+    "singleBytes": 4954933,
+    "totalBytes": 1220213,
+    "requests": 22,
+    "counts": {
+      "image": 14,
+      "style": 1,
+      "script": 0,
+      "font": 4,
+      "media": 0,
+      "icon": 0,
+      "other": 0
+    },
+    "domains": [
+      "famsuptasks.com",
+      "pwa.xyz"
+    ],
+    "textLength": 2838,
+    "durationMs": 18048
+  },
+  "assets": [
+    {
+      "url": "https://famsuptasks.com/_app/immutable/assets/0.q2KP8T-D.css",
+      "path": "assets/e7ece8cdd8a2.css",
+      "type": "style",
+      "size": 42890,
+      "ext": "css",
+      "inlined": false
+    },
+    {
+      "url": "https://famsuptasks.com/landing/hero-visual.png",
+      "path": "assets/7379ddb9c4cb.png",
+      "type": "image",
+      "size": 469004,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/dashboard-preview.webp",
+      "path": "assets/3276f24d85f6.webp",
+      "type": "image",
+      "size": 78832,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-BoldItalic.otf",
+      "path": "assets/3fcd4863efdc.otf",
+      "type": "font",
+      "size": 60192,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-Italic.otf",
+      "path": "assets/2f4ffd982fbb.otf",
+      "type": "font",
+      "size": 58960,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/task-marketplace-mockup.webp",
+      "path": "assets/11892ae6f9b8.webp",
+      "type": "image",
+      "size": 58504,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-Bold.otf",
+      "path": "assets/6762dfc785c1.otf",
+      "type": "font",
+      "size": 57464,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/fonts/ZTNature-Regular.otf",
+      "path": "assets/494ff8a650b4.otf",
+      "type": "font",
+      "size": 54688,
+      "ext": "otf",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/_app/immutable/assets/logo.CPC0XGHD.png",
+      "path": "assets/e050137dcb0b.png",
+      "type": "image",
+      "size": 51182,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/favicon.png",
+      "path": "assets/f216a80c316a.png",
+      "type": "image",
+      "size": 51182,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/task-details-preview.webp",
+      "path": "assets/11f83b6fd314.webp",
+      "type": "image",
+      "size": 43194,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/create-task-mockup.webp",
+      "path": "assets/4bf675aa2321.webp",
+      "type": "image",
+      "size": 21078,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/cta-phone.webp",
+      "path": "assets/25f1593b2e91.webp",
+      "type": "image",
+      "size": 21024,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/referral-stats-mockup.webp",
+      "path": "assets/8ebe083a9d0b.webp",
+      "type": "image",
+      "size": 10496,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://pwa.xyz/JAcg9rgUQcw6HNKgu1AM%2FAdjEmpeXCuJgcSo.png?alt=media&token=3b87256c-9a1d-4ea2-85cc-e96a17549e24",
+      "path": "assets/57d1cbc3755d.png",
+      "type": "image",
+      "size": 8143,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/wallet-mockup.webp",
+      "path": "assets/ea462776a088.webp",
+      "type": "image",
+      "size": 7612,
+      "ext": "webp",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/landing/cta-decoration.svg",
+      "path": "assets/0a776f401e63.svg",
+      "type": "image",
+      "size": 4128,
+      "ext": "svg",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/favicon-32x32.png",
+      "path": "assets/83ef1bbe570c.png",
+      "type": "image",
+      "size": 779,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://famsuptasks.com/favicon-16x16.png",
+      "path": "assets/cf3027b386f5.png",
+      "type": "image",
+      "size": 437,
+      "ext": "png",
+      "inlined": true
+    }
+  ],
+  "pages": [
+    {
+      "slug": "index",
+      "title": "FamsUpTasks : Earn money by completing social Media Tasks",
+      "sourceUrl": "https://famsuptasks.com/register",
+      "kind": "entry",
+      "hasScreenshot": true,
+      "textLength": 2838
+    },
+    {
+      "slug": "index--log-in",
+      "title": "FamsUpTasks : Earn money by completing social Media Tasks — Log In",
+      "sourceUrl": "https://famsuptasks.com/",
+      "kind": "state",
+      "interactionLabel": "Log In",
+      "hasScreenshot": true,
+      "textLength": 2965
+    },
+    {
+      "slug": "index--sign-up",
+      "title": "FamsUpTasks : Earn money by completing social Media Tasks — Sign Up",
+      "sourceUrl": "https://famsuptasks.com/",
+      "kind": "state",
+      "interactionLabel": "Sign Up",
+      "hasScreenshot": true,
+      "textLength": 2989
+    }
+  ]
+}

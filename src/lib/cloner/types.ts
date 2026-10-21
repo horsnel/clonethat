@@ -1,5 +1,7 @@
 export type AssetType = 'image' | 'style' | 'script' | 'font' | 'media' | 'icon' | 'other'
 
+export type RenderMode = 'auto' | 'static' | 'browser'
+
 export interface DownloadedAsset {
   url: string
   buffer: Buffer
@@ -57,6 +59,18 @@ export interface CloneStats {
   durationMs: number
 }
 
+export type PageKind = 'entry' | 'state' | 'page'
+
+export interface ClonePageInfo {
+  slug: string
+  title: string
+  sourceUrl: string
+  kind: PageKind
+  interactionLabel?: string
+  hasScreenshot: boolean
+  textLength: number
+}
+
 export interface CloneMeta {
   id: string
   sourceUrl: string
@@ -64,9 +78,15 @@ export interface CloneMeta {
   title: string
   keepScripts: boolean
   createdAt: number
+  renderMode: RenderMode
+  rendered: boolean
+  autoHealed: { from: string; to: string; note: string } | null
+  warnings: string[]
+  robotsRestricted: boolean
   analysis: Analysis
   stats: CloneStats
   assets: CloneAssetInfo[]
+  pages: ClonePageInfo[]
 }
 
 export interface CloneResult {
@@ -74,19 +94,26 @@ export interface CloneResult {
   singleHtml: string
   mirrorHtml: string
   files: Map<string, Buffer>
+  singles: Map<string, string>
+  shots: Map<string, Buffer>
 }
 
 export interface CloneOptions {
   url: string
   keepScripts: boolean
+  renderMode: RenderMode
+  crawl: boolean
 }
 
 export const ASSET_BUDGET = {
-  maxAssets: 400,
-  maxTotalBytes: 60 * 1024 * 1024,
+  maxAssets: 500,
+  maxTotalBytes: 80 * 1024 * 1024,
   maxAssetBytes: 8 * 1024 * 1024,
   inlineCapBytes: 3 * 1024 * 1024,
 }
 
 export const PAGE_TIMEOUT_MS = 25_000
 export const ASSET_TIMEOUT_MS = 12_000
+
+export const MAX_CRAWL_PAGES = 4
+export const MAX_INTERACTION_STATES = 2

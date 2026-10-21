@@ -13,6 +13,7 @@ function safeFileName(title: string, fallback: string): string {
 export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string }> }) {
   const { id } = await ctx.params
   const format = req.nextUrl.searchParams.get('format') ?? 'zip'
+  const page = req.nextUrl.searchParams.get('page')
 
   const meta = await readMeta(id)
   if (!meta) {
@@ -21,19 +22,20 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
   const name = safeFileName(meta.title, meta.id)
 
   if (format === 'single') {
-    const html = await readSingleHtml(id)
+    const html = await readSingleHtml(id, page)
     if (html === null) {
-      return NextResponse.json({ error: 'Clone file missing.' }, { status: 404 })
+      return NextResponse.json({ error: 'Clone page missing.' }, { status: 404 })
     }
+    const suffix = page && page !== 'index' ? `-${page}` : ''
     return new NextResponse(html, {
       headers: {
         'Content-Type': 'text/html; charset=utf-8',
-        'Content-Disposition': `attachment; filename="${name}-clone.html"`,
+        'Content-Disposition': `attachment; filename="${name}-clone${suffix}.html"`,
       },
     })
   }
 
-  // format=zip — mirror with assets folder
+  // format=zip — full mirror with assets + screenshots
   const files = await readMirrorFiles(id)
   if (!files) {
     return NextResponse.json({ error: 'Mirror files missing.' }, { status: 404 })

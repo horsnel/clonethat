@@ -23,3 +23,25 @@ Stage Summary:
 - Verified working endpoints: /api/clone (200), /api/preview/[id] (text/html), /api/download/[id] (zip+single), /api/clones
 - Test artifacts: download/cloneworkspace.png, download/clone-books.png, download/clone-mobile.png
 - Clone data stored under /home/z/my-project/clones/
+
+---
+Task ID: 2
+Agent: main (Z.ai)
+Task: Upgrade engine to v2 until it can clone https://famsuptasks.com/register
+
+Work Log:
+- Probed target: famsuptasks.com/register is a Svelte SPA; /register has NO server route (404 + shell). The real register UI is a MODAL opened by the "Sign Up" button on the homepage. A raw-HTML cloner can never capture it.
+- Located existing Chromium at ~/.cache/ms-playwright/chromium-1200; installed playwright-core (no browser download needed)
+- Built renderer.ts: lazy singleton headless Chromium, renderPage() (networkidle wait + settle + rendered DOM + innerText sample + screenshot + CTA discovery), captureInteractionState() (replays CTA clicks on fresh pages to capture modal/drawer states), looksLikeNotFound()
+- Rewrote rewriter.ts as multi-page orchestrator: render modes (auto/static/browser), auto-escalation when static HTML is thin/404, AUTO-HEALING (requested URL renders 404 view -> clone the origin root and note it), interaction-state capture (max 2), same-origin crawl (max 4 pages) with cross-origin redirect guard, robots.txt awareness (warning), shared AssetStore + CSS cache across pages, per-page slugs (index, index--sign-up, about...), internal-link rewriting to local .html files for offline navigation
+- Fixed 3 real bugs during debugging: (1) noscript/Meta-Pixel text polluting cheerio .text() broke 404 detection -> switched to browser innerText sample; (2) over-escaped regex in CTA matcher (\\\\s in TS string); (3) evaluate() closure over Node-side `max` variable silently throwing in browser context -> pass as args object
+- store.ts v2: single/ (per-page), mirror/ (multi-page + assets/), shots/ (original screenshots), meta.json with pages[]; 7-day retention
+- API v2: POST /api/clone {renderMode, crawl}, GET /api/preview/[id]?page=slug, GET /api/screenshot/[id]?page=slug, GET /api/download/[id]?format=single|zip&page=slug (ZIP includes _screenshots/)
+- UI v2: render-engine Select (Auto/Browser/Static) + crawl + keepScripts toggles, capture pills (Main page / State · Sign Up ...), Compare tab (original screenshot vs live clone side-by-side), auto-heal info banner, warnings list, RENDERED/N-captures history badges
+- Verified vs target: POST /api/clone famsuptasks.com/register -> auto-escalated to Chromium, auto-healed to root, captured 3 pages (index, index--log-in, index--sign-up), 22 requests, 1.16MB, stack Svelte+Tailwind+Meta Pixel+Cloudflare, palette #ff7300; sign-up state HTML contains full Create-an-account form with 0 remote images; ZIP (28 files) has all 3 HTML pages + assets + _screenshots; agent-browser E2E: state pills switch, register modal renders in iframe, Compare tab matches original, zero page errors, lint clean
+
+Stage Summary:
+- Engine v2 can clone JS-rendered SPAs, hidden interaction states (register modals), and dead URLs (auto-heal)
+- Target requirement MET: famsuptasks.com/register cloned with the register UI as index--sign-up.html (preview + exports)
+- Test artifacts: download/famsu-signup-clone.png, download/famsu-compare.png
+- Known limits: cloned pages are static captures (no re-executed app logic unless keepScripts), media iframes stay remote, captcha-protected sites not bypassed

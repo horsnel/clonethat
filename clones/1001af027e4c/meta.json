@@ -1,0 +1,358 @@
+{
+  "id": "1001af027e4c",
+  "sourceUrl": "https://x.com/",
+  "finalUrl": "https://x.com/",
+  "title": "X. It’s what’s happening / X",
+  "keepScripts": false,
+  "createdAt": 1792621431074,
+  "analysis": {
+    "title": "X. It’s what’s happening / X",
+    "description": "From breaking news and entertainment to sports and politics, get the full story with all the live commentary.",
+    "lang": "en",
+    "ogImage": "https://abs.twimg.com/responsive-web/client-web/icon-ios.77d25eba.png",
+    "favicon": "https://x.com/apple-touch-icon.png",
+    "finalUrl": "https://x.com/",
+    "stack": [
+      {
+        "name": "Tailwind CSS",
+        "category": "css"
+      },
+      {
+        "name": "Bootstrap",
+        "category": "css"
+      }
+    ],
+    "colors": [
+      {
+        "hex": "#cccccc",
+        "count": 7
+      },
+      {
+        "hex": "#1d9bf0",
+        "count": 6
+      },
+      {
+        "hex": "#657786",
+        "count": 5
+      },
+      {
+        "hex": "#f4212e",
+        "count": 4
+      },
+      {
+        "hex": "#6fca6c",
+        "count": 4
+      },
+      {
+        "hex": "#202327",
+        "count": 3
+      },
+      {
+        "hex": "#3f4449",
+        "count": 2
+      },
+      {
+        "hex": "#9c63fa",
+        "count": 2
+      },
+      {
+        "hex": "#829aab",
+        "count": 2
+      },
+      {
+        "hex": "#b6b9bc",
+        "count": 2
+      },
+      {
+        "hex": "#5f5f5f",
+        "count": 2
+      },
+      {
+        "hex": "#eafaff",
+        "count": 2
+      }
+    ],
+    "fonts": [
+      {
+        "family": "TwitterChirp",
+        "count": 30
+      },
+      {
+        "family": "Apple Color Emoji",
+        "count": 1
+      }
+    ],
+    "jsRendered": false
+  },
+  "stats": {
+    "htmlBytes": 42218,
+    "singleBytes": 713967,
+    "totalBytes": 636927,
+    "requests": 32,
+    "counts": {
+      "image": 2,
+      "style": 1,
+      "script": 0,
+      "font": 28,
+      "media": 0,
+      "icon": 0,
+      "other": 0
+    },
+    "domains": [
+      "x.com",
+      "abs.twimg.com"
+    ],
+    "textLength": 407,
+    "durationMs": 844
+  },
+  "assets": [
+    {
+      "url": "https://abs.twimg.com/x-web/x-web/assets/styles-XOCQwmkX.css",
+      "path": "assets/86d992f9e6d6.css",
+      "type": "style",
+      "size": 330696,
+      "ext": "css",
+      "inlined": false
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.d8ac01b2.latin.woff2",
+      "path": "assets/637caffc5a42.woff2",
+      "type": "font",
+      "size": 28496,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.ca6d679a.latin.woff2",
+      "path": "assets/d4c6dd3a7192.woff2",
+      "type": "font",
+      "size": 28360,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.c88864db.latin.woff2",
+      "path": "assets/dcbdad25867d.woff2",
+      "type": "font",
+      "size": 28092,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.a10373f5.latin.woff2",
+      "path": "assets/7c84cc19fe81.woff2",
+      "type": "font",
+      "size": 27748,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://x.com/apple-touch-icon.png",
+      "path": "assets/74d78137e8b6.png",
+      "type": "image",
+      "size": 13160,
+      "ext": "png",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.068b0200.latin-ext.woff2",
+      "path": "assets/8972232d28e3.woff2",
+      "type": "font",
+      "size": 12988,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.f429be5b.latin-ext.woff2",
+      "path": "assets/e63579709103.woff2",
+      "type": "font",
+      "size": 12984,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.31f2e29b.latin-ext.woff2",
+      "path": "assets/9143e5b5263e.woff2",
+      "type": "font",
+      "size": 12916,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.8a607715.latin-ext.woff2",
+      "path": "assets/677996f151bf.woff2",
+      "type": "font",
+      "size": 12676,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.10701e14.symbols.woff2",
+      "path": "assets/49d34cb085be.woff2",
+      "type": "font",
+      "size": 10348,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.2f9f11dc.symbols.woff2",
+      "path": "assets/a977e5d25acc.woff2",
+      "type": "font",
+      "size": 10308,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.79fef6b2.symbols.woff2",
+      "path": "assets/35a9f35147a2.woff2",
+      "type": "font",
+      "size": 10276,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.cb869e71.symbols.woff2",
+      "path": "assets/ce540d75b450.woff2",
+      "type": "font",
+      "size": 10116,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.ecc151b4.vietnamese.woff2",
+      "path": "assets/cb638b512e92.woff2",
+      "type": "font",
+      "size": 6060,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.9e9ec1b5.vietnamese.woff2",
+      "path": "assets/da3875c6c8ea.woff2",
+      "type": "font",
+      "size": 5968,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.4e5772bb.vietnamese.woff2",
+      "path": "assets/687c029552af.woff2",
+      "type": "font",
+      "size": 5948,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.6f386e86.vietnamese.woff2",
+      "path": "assets/47732883dac4.woff2",
+      "type": "font",
+      "size": 5860,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.65cb29f6.cyrillic.woff2",
+      "path": "assets/a31fc6d367bb.woff2",
+      "type": "font",
+      "size": 1876,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.e91f44bd.cyrillic.woff2",
+      "path": "assets/be02c3358f34.woff2",
+      "type": "font",
+      "size": 1836,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.4829677c.cyrillic-ext.woff2",
+      "path": "assets/3e1bdf207ca3.woff2",
+      "type": "font",
+      "size": 1836,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.05acadb2.cyrillic.woff2",
+      "path": "assets/d7d830c26662.woff2",
+      "type": "font",
+      "size": 1832,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.af75cb13.cyrillic.woff2",
+      "path": "assets/22a91a078f65.woff2",
+      "type": "font",
+      "size": 1824,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.4f233ddb.cyrillic-ext.woff2",
+      "path": "assets/c582452b8588.woff2",
+      "type": "font",
+      "size": 1816,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.cbf2bee8.cyrillic-ext.woff2",
+      "path": "assets/e16ff2664cfd.woff2",
+      "type": "font",
+      "size": 1796,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.ad6144dc.cyrillic-ext.woff2",
+      "path": "assets/cbfdaa694114.woff2",
+      "type": "font",
+      "size": 1744,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Medium.638bf110.greek.woff2",
+      "path": "assets/63c61f9d0135.woff2",
+      "type": "font",
+      "size": 1688,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Regular.1d1116eb.greek.woff2",
+      "path": "assets/0404d203810b.woff2",
+      "type": "font",
+      "size": 1688,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Bold.d9f61649.greek.woff2",
+      "path": "assets/03a0a84b51a5.woff2",
+      "type": "font",
+      "size": 1640,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://abs.twimg.com/fonts/subset/Chirp-Heavy.8d4b2d6d.greek.woff2",
+      "path": "assets/f38840039e16.woff2",
+      "type": "font",
+      "size": 1584,
+      "ext": "woff2",
+      "inlined": true
+    },
+    {
+      "url": "https://x.com/favicon.ico",
+      "path": "assets/23cd33084191.ico",
+      "type": "image",
+      "size": 549,
+      "ext": "ico",
+      "inlined": true
+    }
+  ]
+}
