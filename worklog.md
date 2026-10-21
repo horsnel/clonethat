@@ -45,3 +45,18 @@ Stage Summary:
 - Target requirement MET: famsuptasks.com/register cloned with the register UI as index--sign-up.html (preview + exports)
 - Test artifacts: download/famsu-signup-clone.png, download/famsu-compare.png
 - Known limits: cloned pages are static captures (no re-executed app logic unless keepScripts), media iframes stay remote, captcha-protected sites not bypassed
+
+---
+Task ID: 3
+Agent: main (Z.ai)
+Task: Package CloneForge deliverables for download (clone ZIP + project source ZIP)
+
+Work Log:
+- Verified latest clone d8d9e11187c2 = famsuptasks.com (auto-healed, 3 pages incl. index--sign-up)
+- Wrote scripts/package-downloads.sh
+- Built download/famsuptasks-clone.zip (5.2M): multi-page mirror at root (index.html, index--sign-up.html, index--log-in.html + assets/), _screenshots/ of original, single-html/ self-contained versions, clone-meta.json, README.txt with usage instructions
+- Built download/cloneforge-source.zip (218K): full Next.js source (src/, public/, prisma/, scripts/, configs) excluding node_modules/.next/clones
+- Verified both archives list all key files; dev server still running on port 3000
+
+Stage Summary:
+- User-facing downloads ready: download/famsuptasks-clone.zip, download/cloneforge-source.zip
