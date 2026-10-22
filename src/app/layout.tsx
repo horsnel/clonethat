@@ -14,13 +14,14 @@ const geistMono = Geist_Mono({
 });
 
 export const metadata: Metadata = {
-  title: "CloneForge — Clone any website in seconds",
+  title: "Clonethat — clone any website, rebuild it clean",
   description:
-    "The most powerful website cloner: deep asset cloning, tech-stack analysis, live preview and one-click ZIP export.",
-  keywords: ["website cloner", "site mirroring", "asset download", "CloneForge", "web tools"],
+    "Clone any site with headless Chromium, replay hidden UI states, and rebuild pages as clean Tailwind HTML + React with AI. Ephemeral by default — clones self-destruct in 24h.",
+  keywords: ["website cloner", "AI rebuild", "tailwind", "react", "clonethat", "web tools"],
   openGraph: {
-    title: "CloneForge — Clone any website in seconds",
-    description: "Deep asset cloning, stack analysis, live preview, one-click export.",
+    title: "Clonethat — clone any website, rebuild it clean",
+    description:
+      "Headless rendering, interaction replay, multi-page crawl, AI rebuild to Tailwind + React.",
     type: "website",
   },
 };
@@ -32,6 +33,16 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
+      <head>
+        <link rel="preconnect" href="https://fonts.googleapis.com" />
+        <link rel="preconnect" href="https://fonts.gstatic.com" crossOrigin="anonymous" />
+        {/* brand wordmark font — degrades to the system mono stack offline */}
+        {/* eslint-disable-next-line @next/next/no-page-custom-font */}
+        <link
+          href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@500;700&display=swap"
+          rel="stylesheet"
+        />
+      </head>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased bg-zinc-950 text-zinc-100`}
       >

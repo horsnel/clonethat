@@ -3,7 +3,7 @@
 
 @custom-variant dark (&:is(.dark *));
 
-/* CloneForge scrollbars */
+/* Clonethat scrollbars */
 .cloner-scroll::-webkit-scrollbar {
   width: 8px;
   height: 8px;
@@ -126,6 +126,11 @@
   --sidebar-accent-foreground: oklch(0.985 0 0);
   --sidebar-border: oklch(1 0 0 / 10%);
   --sidebar-ring: oklch(0.556 0 0);
+}
+
+/* Clonethat brand wordmark — JetBrains Mono per the logo spec */
+.font-brand {
+  font-family: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Consolas, monospace;
 }
 
 @layer base {

@@ -2,10 +2,12 @@
 
 import { useState } from 'react'
 import { motion } from 'framer-motion'
+import Link from 'next/link'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { Switch } from '@/components/ui/switch'
 import { Label } from '@/components/ui/label'
+import { Checkbox } from '@/components/ui/checkbox'
 import { Card, CardContent } from '@/components/ui/card'
 import { Badge } from '@/components/ui/badge'
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from '@/components/ui/select'
@@ -51,10 +53,11 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
   const [keepScripts, setKeepScripts] = useState(false)
   const [crawl, setCrawl] = useState(true)
   const [renderMode, setRenderMode] = useState<RenderModeUi>('auto')
+  const [consent, setConsent] = useState(false)
 
   const submit = (e: React.FormEvent) => {
     e.preventDefault()
-    if (url.trim() && !loading) onClone(url.trim(), { keepScripts, renderMode, crawl })
+    if (url.trim() && consent && !loading) onClone(url.trim(), { keepScripts, renderMode, crawl })
   }
 
   return (
@@ -64,7 +67,7 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
         className="pointer-events-none absolute inset-0 opacity-[0.35]"
         style={{
           backgroundImage:
-            'radial-gradient(ellipse 60% 40% at 50% -10%, rgba(16,185,129,0.25), transparent), linear-gradient(rgba(63,63,70,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(63,63,70,0.25) 1px, transparent 1px)',
+            'radial-gradient(ellipse 60% 40% at 50% -10%, rgba(45,212,191,0.25), transparent), linear-gradient(rgba(63,63,70,0.25) 1px, transparent 1px), linear-gradient(90deg, rgba(63,63,70,0.25) 1px, transparent 1px)',
           backgroundSize: 'auto, 56px 56px, 56px 56px',
         }}
       />
@@ -76,7 +79,7 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
         >
           <Badge
             variant="outline"
-            className="mb-5 max-w-full flex-wrap justify-center gap-1.5 whitespace-normal border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-center text-[11px] leading-relaxed text-emerald-300 sm:text-xs"
+            className="mb-5 max-w-full flex-wrap justify-center gap-1.5 whitespace-normal border-teal-500/40 bg-teal-500/10 px-3 py-1 text-center text-[11px] leading-relaxed text-teal-300 sm:text-xs"
           >
             <Sparkles className="h-3 w-3 shrink-0" aria-hidden />
             Chromium rendering · interaction replay · multi-page crawl
@@ -84,13 +87,13 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-6xl">
             Clone any website.
             <br />
-            <span className="bg-gradient-to-r from-emerald-300 via-teal-300 to-lime-200 bg-clip-text text-transparent">
+            <span className="bg-gradient-to-r from-teal-300 via-teal-200 to-lime-200 bg-clip-text text-transparent">
               Even the JavaScript.
             </span>
           </h1>
           <p className="mx-auto mt-5 max-w-xl text-pretty text-base text-zinc-400 sm:text-lg">
-            CloneForge renders pages in a real browser, replays interactions to capture hidden UI,
-            crawls linked pages and hands you a ready-to-deploy copy.
+            Clonethat renders pages in a real browser, replays interactions to capture hidden UI,
+            crawls linked pages and hands you a ready-to-deploy copy — then AI-rebuilds it as clean Tailwind + React.
           </p>
         </motion.div>
 
@@ -113,13 +116,13 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
                 autoComplete="url"
                 spellCheck={false}
                 aria-label="Website URL to clone"
-                className="h-12 border-0 bg-transparent pl-10 font-mono text-sm shadow-none focus-visible:ring-1 focus-visible:ring-emerald-500/60 sm:text-base"
+                className="h-12 border-0 bg-transparent pl-10 font-mono text-sm shadow-none focus-visible:ring-1 focus-visible:ring-teal-500/60 sm:text-base"
               />
             </div>
             <Button
               type="submit"
-              disabled={loading || !url.trim()}
-              className="h-12 gap-2 bg-emerald-500 px-6 font-semibold text-zinc-950 hover:bg-emerald-400"
+              disabled={loading || !url.trim() || !consent}
+              className="h-12 gap-2 bg-teal-500 px-6 font-semibold text-zinc-950 hover:bg-teal-400"
             >
               {loading ? (
                 <Loader2 className="h-4 w-4 animate-spin" aria-hidden />
@@ -128,6 +131,26 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
               )}
               {loading ? 'Cloning…' : 'Clone site'}
             </Button>
+          </div>
+
+          <div className="mt-4 flex justify-center">
+            <label className="flex max-w-full cursor-pointer items-center gap-2 rounded-full border border-zinc-800 bg-zinc-900/60 px-3.5 py-2">
+              <Checkbox
+                checked={consent}
+                onCheckedChange={(v) => setConsent(v === true)}
+                aria-label="Confirm you own this site or have permission to clone it"
+              />
+              <span className="text-xs leading-tight text-zinc-400">
+                I own this site or have permission to clone it ·{' '}
+                <Link
+                  href="/tos"
+                  className="underline decoration-zinc-700 underline-offset-2 transition-colors hover:text-teal-300"
+                  onClick={(e) => e.stopPropagation()}
+                >
+                  Terms
+                </Link>
+              </span>
+            </label>
           </div>
 
           <div className="mt-4 flex flex-wrap items-center justify-center gap-2.5">
@@ -140,18 +163,18 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
                         aria-label="Rendering engine"
                         className="h-9 w-[190px] gap-2 border-zinc-800 bg-zinc-900/60 text-xs text-zinc-300"
                       >
-                        <Cpu className="h-3.5 w-3.5 text-emerald-400" aria-hidden />
+                        <Cpu className="h-3.5 w-3.5 text-teal-400" aria-hidden />
                         <SelectValue />
                       </SelectTrigger>
                       <SelectContent className="border-zinc-800 bg-zinc-900 text-zinc-200">
                         <SelectItem value="auto">
-                          <span className="flex items-center gap-2"><Wand2 className="h-3.5 w-3.5 text-emerald-400" />Auto — smart escalate</span>
+                          <span className="flex items-center gap-2"><Wand2 className="h-3.5 w-3.5 text-teal-400" />Auto — smart escalate</span>
                         </SelectItem>
                         <SelectItem value="browser">
-                          <span className="flex items-center gap-2"><Cpu className="h-3.5 w-3.5 text-emerald-400" />Always render (Chromium)</span>
+                          <span className="flex items-center gap-2"><Cpu className="h-3.5 w-3.5 text-teal-400" />Always render (Chromium)</span>
                         </SelectItem>
                         <SelectItem value="static">
-                          <span className="flex items-center gap-2"><FileCode2 className="h-3.5 w-3.5 text-emerald-400" />Fast static HTML</span>
+                          <span className="flex items-center gap-2"><FileCode2 className="h-3.5 w-3.5 text-teal-400" />Fast static HTML</span>
                         </SelectItem>
                       </SelectContent>
                     </Select>
@@ -183,7 +206,7 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
                 key={ex}
                 type="button"
                 onClick={() => setUrl(ex)}
-                className="rounded-full border border-zinc-800 bg-zinc-900/60 px-2.5 py-1 font-mono text-xs text-zinc-400 transition-colors hover:border-emerald-500/40 hover:text-emerald-300"
+                className="rounded-full border border-zinc-800 bg-zinc-900/60 px-2.5 py-1 font-mono text-xs text-zinc-400 transition-colors hover:border-teal-500/40 hover:text-teal-300"
               >
                 {ex}
               </button>
@@ -202,8 +225,8 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
           >
             <Card className="h-full border-zinc-800/80 bg-zinc-900/50">
               <CardContent className="p-6">
-                <div className="mb-3 inline-flex rounded-lg border border-emerald-500/30 bg-emerald-500/10 p-2.5">
-                  <f.icon className="h-5 w-5 text-emerald-300" aria-hidden />
+                <div className="mb-3 inline-flex rounded-lg border border-teal-500/30 bg-teal-500/10 p-2.5">
+                  <f.icon className="h-5 w-5 text-teal-300" aria-hidden />
                 </div>
                 <h3 className="mb-2 font-semibold text-zinc-100">{f.title}</h3>
                 <p className="text-sm leading-relaxed text-zinc-400">{f.desc}</p>

@@ -245,8 +245,8 @@ function preclean($d: cheerio.CheerioAPI): void {
   })
   $d('[integrity]').removeAttr('integrity')
   $d('[crossorigin]').removeAttr('crossorigin')
-  // neutralize cloneforge's own discovery markers
-  $d('[data-cloneforge-cta]').removeAttr('data-cloneforge-cta')
+  // neutralize Clonethat's own discovery markers
+  $d('[data-clonethat-cta]').removeAttr('data-clonethat-cta')
 }
 
 // ---------------------------------------------------------------------------
@@ -665,7 +665,7 @@ export async function cloneSite(opts: CloneOptions): Promise<CloneResult> {
     return asset ? `${asset.hash}.${asset.ext}` : abs
   }
 
-  const clonedNote = `<!-- Cloned with CloneForge on ${new Date().toISOString()} from ${entry.finalUrl} -->\n`
+  const clonedNote = `<!-- Cloned with Clonethat on ${new Date().toISOString()} from ${entry.finalUrl} -->\n`
 
   const materialize = (source: PageSource, mode: 'single' | 'mirror'): string => {
     const $d = cheerio.load(source.html)

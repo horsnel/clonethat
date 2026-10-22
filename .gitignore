@@ -63,3 +63,5 @@ server.log
 /examples/
 /tests/
 /Caddyfile
+/.zscripts/
+/mini-services/

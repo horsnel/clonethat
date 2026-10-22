@@ -40,6 +40,11 @@
     "node_modules",
     "clones",
     "download",
-    ".next"
+    ".next",
+    "skills",
+    "examples",
+    "tests",
+    "tool-results",
+    "upload"
   ]
 }

@@ -1,11 +1,8 @@
-import { readFile, writeFile, mkdir } from 'fs/promises'
-import path from 'path'
 import * as cheerio from 'cheerio'
 import type { AnyNode } from 'domhandler'
-import ZAI from 'z-ai-web-dev-sdk'
+import { getLLM, type LLMClient } from '@/lib/ai/provider'
+import { storage } from './storage'
 import type { CloneMeta, ClonePageInfo } from './types'
-
-const CLONES_ROOT = path.join(process.cwd(), 'clones')
 const MAX_INPUT_CHARS = 60_000
 const SVG_KEEP_CHARS = 500
 const FULL_REBUILD_LIMIT = 16_000
@@ -13,9 +10,10 @@ const BATCH_SIZE = 12_000
 const MAX_LLM_ROUNDS = 3
 const JUNK_RE = /aria-live|svelte-announcer|progressier|sr-only|skip-link|visually-hidden|pointer-events-none/i
 
-function cloneDir(id: string): string {
+/** Validated relative prefix for every storage read/write of a clone's artifacts. */
+function cloneRel(id: string): string {
   if (!/^[a-z0-9]{6,24}$/i.test(id)) throw new Error('Invalid clone id')
-  return path.join(CLONES_ROOT, id)
+  return id
 }
 
 function safeSlug(slug: string | null | undefined): string {
@@ -239,34 +237,9 @@ function reactUserPrompt(doc: string, meta: CloneMeta, page: ClonePageInfo | und
 }
 
 /* ------------------------------------------------------------------ */
-/* LLM plumbing                                                        */
+/* LLM plumbing — the client is injected (z.ai sandbox, env key or     */
+/* BYOK per request); retry/backoff lives inside the provider.         */
 /* ------------------------------------------------------------------ */
-
-async function callLLM(system: string, user: string): Promise<string> {
-  const zai = await ZAI.create()
-  let lastErr: unknown
-  for (let attempt = 0; attempt < 5; attempt++) {
-    try {
-      const completion = await zai.chat.completions.create({
-        messages: [
-          { role: 'assistant', content: system },
-          { role: 'user', content: user },
-        ],
-        thinking: { type: 'disabled' },
-      })
-      const text = completion.choices[0]?.message?.content ?? ''
-      if (!text.trim()) throw new Error('Empty AI response')
-      return text
-    } catch (err) {
-      lastErr = err
-      const msg = err instanceof Error ? err.message : String(err)
-      const isRate = /429|rate/i.test(msg)
-      if (!isRate || attempt === 4) break
-      await new Promise((r) => setTimeout(r, 8000 * (attempt + 1)))
-    }
-  }
-  throw lastErr instanceof Error ? lastErr : new Error(String(lastErr))
-}
 
 /** Tiny semaphore to cap concurrent LLM calls (rate-limit friendly). */
 function createSemaphore(limit: number) {
@@ -331,6 +304,7 @@ function continuationPrompt(user: string, acc: string, instruction: string): str
 
 /** Call the LLM, auto-continuing until `isDone` says the accumulated output is complete. */
 async function callLLMComplete(
+  llm: LLMClient,
   system: string,
   user: string,
   isDone: (acc: string) => boolean,
@@ -340,7 +314,7 @@ async function callLLMComplete(
   if (isDone(acc)) return acc
   for (let round = 0; round < MAX_LLM_ROUNDS; round++) {
     const prompt = round === 0 ? user : continuationPrompt(user, acc, continuationInstruction)
-    const chunk = stripFences(await callLLM(system, prompt))
+    const chunk = stripFences(await llm.complete(system, prompt))
     // stop if the model is re-outputting content we already have (runaway guard)
     const probeHead = norm(chunk).slice(0, 260)
     if (acc && probeHead.length > 120 && norm(acc).includes(probeHead)) break
@@ -372,6 +346,7 @@ function dedupeSections(out: string): string {
 
 /** Batch mode: independent attempts, keep the one with the fewest probe misses (no stitching artifacts). */
 async function generateWithRetry(
+  llm: LLMClient,
   system: string,
   user: string,
   score: (out: string) => number,
@@ -387,7 +362,7 @@ async function generateWithRetry(
           '=== ORIGINAL TASK (full source) ===',
           user,
         ].join('\n')
-    const out = stripFences(await callLLM(system, prompt))
+    const out = stripFences(await llm.complete(system, prompt))
     const sc = score(out)
     if (sc === 0) return out
     if (sc < bestScore) {
@@ -483,15 +458,15 @@ export interface RebuildPayload {
 export async function readRebuild(id: string, slug: string | null): Promise<RebuildPayload | null> {
   const s = safeSlug(slug)
   try {
-    const dir = path.join(cloneDir(id), 'rebuild')
+    const base = `${cloneRel(id)}/rebuild`
     const [code, react] = await Promise.all([
-      readFile(path.join(dir, `${s}.html`), 'utf8'),
-      readFile(path.join(dir, `${s}.tsx`), 'utf8').catch(() => null),
+      storage.readText(`${base}/${s}.html`),
+      storage.readText(`${base}/${s}.tsx`).catch(() => null),
     ])
     // derive the preview shell at read time (compiled CSS + CDN fallback)
     let previewHtml = ensureCdnScript(code)
     try {
-      const mirrorHtml = await readFile(path.join(cloneDir(id), 'mirror', `${s}.html`), 'utf8')
+      const mirrorHtml = await storage.readText(`${cloneRel(id)}/mirror/${s}.html`)
       previewHtml = toPreviewHtml(code, id, await collectCompiledCss(id, mirrorHtml))
     } catch { /* mirror missing — plain code preview */ }
     return { code, react, previewHtml }
@@ -509,7 +484,7 @@ async function collectCompiledCss(id: string, mirrorHtml: string): Promise<strin
   const chunks: string[] = []
   for (const href of hrefs) {
     try {
-      const css = await readFile(path.join(cloneDir(id), 'mirror', href), 'utf8')
+      const css = await storage.readText(`${cloneRel(id)}/mirror/${href}`)
       chunks.push(css)
     } catch { /* optional */ }
   }
@@ -539,7 +514,7 @@ function toPreviewHtml(code: string, id: string, compiledCss: string): string {
   out = out.replace(/(src|href)="(assets\/[^"]+)"/g, `$1="/api/asset/${id}/$2"`)
   if (compiledCss) {
     // compiled site CSS first (offline fallback), Tailwind CDN after (its utilities win the cascade)
-    const block = `<style data-cloneforge-compiled>${compiledCss}</style>\n <script src="https://cdn.tailwindcss.com"></` + `script>`
+    const block = `<style data-clonethat-compiled>${compiledCss}</style>\n <script src="https://cdn.tailwindcss.com"></` + `script>`
     if (/<script[^>]*cdn\.tailwindcss\.com[^>]*><\/script>/i.test(out)) {
       out = out.replace(/<script[^>]*cdn\.tailwindcss\.com[^>]*><\/script>/i, block)
     } else if (/<head[^>]*>/i.test(out)) {
@@ -567,16 +542,18 @@ export async function rebuildPage(
   slug: string | null,
   meta: CloneMeta,
   onProgress: (step: number, message: string) => void = () => {},
+  llm?: LLMClient,
 ): Promise<RebuildOutcome> {
   const s = safeSlug(slug)
+  const client = llm ?? (await getLLM())
   const started = Date.now()
 
   // 1. load captured DOM (mirror first, single-file fallback)
   let mirrorHtml: string
   try {
-    mirrorHtml = await readFile(path.join(cloneDir(id), 'mirror', `${s}.html`), 'utf8')
+    mirrorHtml = await storage.readText(`${cloneRel(id)}/mirror/${s}.html`)
   } catch {
-    mirrorHtml = await readFile(path.join(cloneDir(id), 'single', `${s}.html`), 'utf8')
+    mirrorHtml = await storage.readText(`${cloneRel(id)}/single/${s}.html`)
   }
 
   // 2. slim + state-overlay isolation
@@ -606,12 +583,12 @@ export async function rebuildPage(
       : 'Output ONE complete HTML document starting with <!DOCTYPE html> and ending with </html>.'
     const user = htmlUserPrompt(part, meta, page, note)
     if (batched) {
-      const raw = await generateWithRetry(HTML_SYSTEM, user, (out) =>
+      const raw = await generateWithRetry(client, HTML_SYSTEM, user, (out) =>
         out.trim().length < 200 ? 99 : missingProbes(probes, out).length,
       )
       return dedupeSections(raw)
     }
-    return callLLMComplete(HTML_SYSTEM, user, (acc) => looksCompleteHtml(acc), 'Output ONLY the raw continuation so the document ends with </html>.')
+    return callLLMComplete(client, HTML_SYSTEM, user, (acc) => looksCompleteHtml(acc), 'Output ONLY the raw continuation so the document ends with </html>.')
   }
 
   async function generateReact(part: string): Promise<string> {
@@ -621,12 +598,12 @@ export async function rebuildPage(
       : 'Output ONE complete component file: start with `export default function Page() {`.'
     const user = reactUserPrompt(part, meta, page, note)
     if (batched) {
-      const raw = await generateWithRetry(REACT_SYSTEM, user, (out) =>
+      const raw = await generateWithRetry(client, REACT_SYSTEM, user, (out) =>
         out.trim().length < 200 ? 99 : missingProbes(probes, out).length,
       )
       return dedupeSections(raw)
     }
-    return finalizeReact(await callLLMComplete(REACT_SYSTEM, user, (acc) => looksCompleteReact(acc), 'Output ONLY the raw continuation so the component closes all braces.'))
+    return finalizeReact(await callLLMComplete(client, REACT_SYSTEM, user, (acc) => looksCompleteReact(acc), 'Output ONLY the raw continuation so the component closes all braces.'))
   }
 
   // one shared rate-limit budget: max 3 LLM calls in flight across both formats
@@ -659,11 +636,9 @@ export async function rebuildPage(
   onProgress(4, 'Polishing the code…')
 
   // 5. persist (preview shell is derived at read time)
-  const dir = path.join(cloneDir(id), 'rebuild')
-  await mkdir(dir, { recursive: true })
   await Promise.all([
-    writeFile(path.join(dir, `${s}.html`), Buffer.from(code, 'utf8')),
-    react ? writeFile(path.join(dir, `${s}.tsx`), Buffer.from(react, 'utf8')) : Promise.resolve(),
+    storage.write(`${cloneRel(id)}/rebuild/${s}.html`, code),
+    react ? storage.write(`${cloneRel(id)}/rebuild/${s}.tsx`, react) : Promise.resolve(),
   ])
 
   return {

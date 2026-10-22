@@ -7,7 +7,9 @@ import { Hero } from '@/components/cloner/hero'
 import { Workspace } from '@/components/cloner/workspace'
 import type { CloneResponse, CloneListItem, RenderModeUi, JobStateUi } from '@/components/cloner/shared'
 import { formatBytes, formatDate, hostnameOf, safeJson, sleep } from '@/components/cloner/shared'
-import { Check, Globe, History, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react'
+import { Check, History, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react'
+import Link from 'next/link'
+import { BrandMark, Wordmark } from '@/components/cloner/brand'
 
 type View = { kind: 'idle' } | { kind: 'cloning' } | { kind: 'done'; result: CloneResponse }
 
@@ -76,6 +78,7 @@ export default function Home() {
           keepScripts: opts.keepScripts,
           renderMode: opts.renderMode,
           crawl: opts.crawl,
+          consent: true, // the hero's checkbox gate is the only path here; the server verifies anyway
         }),
       })
       const start = await safeJson<{ ok: boolean; jobId?: string; error?: string }>(startRes)
@@ -147,18 +150,18 @@ export default function Home() {
           <button
             onClick={() => setView({ kind: 'idle' })}
             className="flex items-center gap-2.5"
-            aria-label="CloneForge home"
+            aria-label="Clonethat home"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-zinc-950">
-              <Globe className="h-4.5 w-4.5" aria-hidden />
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-400 text-zinc-950">
+              <BrandMark className="h-5 w-5" />
             </span>
-            <span className="text-base font-bold tracking-tight">CloneForge</span>
+            <Wordmark className="text-base" />
             <span className="rounded-full border border-zinc-700 px-1.5 py-0.5 text-[10px] font-medium text-zinc-400">
-              v2
+              beta
             </span>
           </button>
           <div className="flex items-center gap-1.5 text-xs text-zinc-500">
-            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" aria-hidden />
+            <ShieldCheck className="h-3.5 w-3.5 text-teal-500" aria-hidden />
             <span className="hidden sm:inline">Runs entirely on this server — nothing is uploaded anywhere</span>
             <span className="sm:hidden">Private</span>
           </div>
@@ -186,13 +189,13 @@ export default function Home() {
 
         {view.kind === 'cloning' && (
           <section className="mx-auto flex w-full max-w-md flex-col items-center px-4 py-24" aria-label="Cloning progress">
-            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/10">
-              <Loader2 className="h-8 w-8 animate-spin text-emerald-400" aria-hidden />
+            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-teal-500/30 bg-teal-500/10">
+              <Loader2 className="h-8 w-8 animate-spin text-teal-400" aria-hidden />
             </div>
             <h2 className="text-lg font-semibold">Cloning {hostnameOf(lastUrl.current)}…</h2>
             <p className="mt-1 text-sm text-zinc-500">Browser rendering takes a little longer — usually 15–60s.</p>
             {progressMsg && (
-              <p className="mt-2 max-w-sm text-center font-mono text-[11px] text-emerald-400/90" aria-live="polite">
+              <p className="mt-2 max-w-sm text-center font-mono text-[11px] text-teal-400/90" aria-live="polite">
                 {progressMsg}
               </p>
             )}
@@ -204,9 +207,9 @@ export default function Home() {
                     <span
                       className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${
                         state === 'done'
-                          ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-400'
+                          ? 'border-teal-500/50 bg-teal-500/15 text-teal-400'
                           : state === 'active'
-                            ? 'border-emerald-500/50 bg-emerald-500/10'
+                            ? 'border-teal-500/50 bg-teal-500/10'
                             : 'border-zinc-800 bg-zinc-900 text-zinc-700'
                       }`}
                     >
@@ -234,10 +237,15 @@ export default function Home() {
       <footer className="mt-auto border-t border-zinc-800/80 bg-zinc-950 pb-[env(safe-area-inset-bottom)]">
         <div className="mx-auto flex w-full max-w-7xl flex-col items-center justify-between gap-2 px-4 py-5 text-xs text-zinc-600 sm:flex-row">
           <p>
-            <span className="font-semibold text-zinc-500">CloneForge v2</span> — built for prototyping, archiving and
-            learning. Only clone sites you own or have permission to use.
+            <span className="font-semibold text-zinc-500">Clonethat</span> — built for prototyping, archiving and
+            learning. Only clone sites you own or have permission to use. ·{' '}
+            <Link href="/tos" className="underline decoration-zinc-700 underline-offset-2 transition-colors hover:text-zinc-400">
+              Terms
+            </Link>
           </p>
-          <p className="font-mono text-[10px]">Next.js 16 · Chromium rendering · static exports</p>
+          <p className="font-mono text-[10px]">
+            product of <strong className="font-bold text-zinc-400">O.L.H.M.E.S</strong>
+          </p>
         </div>
       </footer>
     </div>
@@ -273,7 +281,7 @@ function HistoryStrip({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
               onClick={() => onOpen(c.id)}
-              className="group rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-left transition-colors hover:border-emerald-500/40 hover:bg-zinc-900"
+              className="group rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-left transition-colors hover:border-teal-500/40 hover:bg-zinc-900"
             >
               <div className="flex items-center gap-1.5">
                 {c.rendered && (
@@ -287,7 +295,7 @@ function HistoryStrip({
                   </span>
                 )}
               </div>
-              <p className="mt-1.5 truncate text-sm font-medium text-zinc-200 group-hover:text-emerald-300">{c.title}</p>
+              <p className="mt-1.5 truncate text-sm font-medium text-zinc-200 group-hover:text-teal-300">{c.title}</p>
               <p className="mt-0.5 truncate font-mono text-[11px] text-zinc-500">{hostnameOf(c.finalUrl)}</p>
               <div className="mt-2.5 flex items-center gap-2 text-[10px] text-zinc-600">
                 <span>{formatBytes(c.totalBytes)}</span>
