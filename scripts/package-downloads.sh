@@ -24,6 +24,10 @@ cp -r "$CLONE/shots/." "$STAGE/_screenshots/" 2>/dev/null || true
 mkdir -p "$STAGE/single-html"
 cp -r "$CLONE/single/." "$STAGE/single-html/" 2>/dev/null || true
 
+# AI rebuild outputs (clean Tailwind HTML + React components)
+mkdir -p "$STAGE/rebuild"
+cp "$CLONE/rebuild/." "$STAGE/rebuild/" 2>/dev/null || true
+
 # Metadata + README
 cp "$CLONE/meta.json" "$STAGE/clone-meta.json"
 
@@ -53,6 +57,13 @@ The root of this folder IS the site (index.html + assets/). To view:
                   no assets folder needed.
   _screenshots/ — screenshots of the ORIGINAL site pages for fidelity comparison.
   clone-meta.json — full engine metadata (analysis, warnings, timestamps).
+
+AI REBUILD (bonus)
+------------------
+rebuild/ contains AI-generated clean rewrites of the captured pages as
+hand-readable Tailwind code (.html) + React components (.tsx).
+They need only the Tailwind CDN (already included) — open rebuild/index.html
+in a browser; images resolve via the assets/ folder at the site root.
 EOF
 
 cd "$STAGE" && zip -qr "$DL/famsuptasks-clone.zip" . -x ".*"

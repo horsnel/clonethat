@@ -12,8 +12,22 @@ import { formatBytes, hostnameOf, type CloneResponse } from './shared'
 import {
   AlertTriangle, Check, Code2, Copy, Download, ExternalLink,
   FileArchive, Info, Layers, Loader2, Monitor, MousePointerClick,
-  Package, RefreshCw, ShieldAlert, Smartphone, SplitSquareHorizontal, Tablet,
+  Package, RefreshCw, ShieldAlert, Smartphone, Sparkles, SplitSquareHorizontal, Tablet, Wand2,
 } from 'lucide-react'
+
+interface RebuildData {
+  code: string
+  react: string | null
+  previewHtml: string
+}
+
+const REBUILD_STEPS = [
+  'Reading the captured DOM…',
+  'Extracting design tokens…',
+  'Rebuilding layout with Tailwind…',
+  'Generating React component…',
+  'Polishing the code…',
+]
 
 interface WorkspaceProps {
   result: Pick<CloneResponse, 'id' | 'meta' | 'htmlPreview' | 'htmlTruncated' | 'htmlSize'>
@@ -49,6 +63,11 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
   const [codeLoading, setCodeLoading] = useState(false)
   const [codeText, setCodeText] = useState<string | null>(null)
   const [codeTruncated, setCodeTruncated] = useState(false)
+  const [rebuild, setRebuild] = useState<RebuildData | null>(null)
+  const [rebuildLoading, setRebuildLoading] = useState(false)
+  const [rebuildError, setRebuildError] = useState<string | null>(null)
+  const [rebuildStep, setRebuildStep] = useState(0)
+  const [rebuildView, setRebuildView] = useState<'preview' | 'html' | 'react'>('preview')
   const previewBase = `/api/preview/${id}`
   const previewUrl = `${previewBase}?page=${activeSlug}`
   const shotUrl = `/api/screenshot/${id}?page=${activeSlug}`
@@ -60,13 +79,54 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
     setIframeKey((k) => k + 1)
     setCodeText(htmlPreview || null)
     setCodeTruncated(htmlTruncated)
+    setRebuild(null)
+    setRebuildError(null)
   }, [id])
 
   useEffect(() => {
     setIframeKey((k) => k + 1)
     setCodeText(null)
     setCodeTruncated(false)
+    setRebuild(null)
+    setRebuildError(null)
+    setRebuildView('preview')
   }, [activeSlug])
+
+  // rotate progress messages while the AI is working
+  useEffect(() => {
+    if (!rebuildLoading) return
+    const t = setInterval(() => setRebuildStep((s) => (s + 1) % REBUILD_STEPS.length), 3200)
+    return () => clearInterval(t)
+  }, [rebuildLoading])
+
+  const ensureRebuild = useCallback(async () => {
+    if (rebuildLoading) return
+    setRebuildLoading(true)
+    setRebuildError(null)
+    try {
+      let res = await fetch(`/api/rebuild/${id}?page=${activeSlug}`)
+      if (res.status === 404) {
+        res = await fetch(`/api/rebuild/${id}?page=${activeSlug}`, { method: 'POST' })
+      }
+      const data = await res.json()
+      if (!res.ok || !data.exists) throw new Error(data.error ?? 'Rebuild unavailable.')
+      setRebuild({ code: data.code, react: data.react, previewHtml: data.previewHtml })
+    } catch (e) {
+      setRebuildError(e instanceof Error ? e.message : 'AI rebuild failed.')
+    } finally {
+      setRebuildLoading(false)
+    }
+  }, [id, activeSlug, rebuildLoading])
+
+  const copyRebuild = async (text: string | null, label: string) => {
+    if (!text) return
+    try {
+      await navigator.clipboard.writeText(text)
+      toast.success(`${label} copied to clipboard`)
+    } catch {
+      toast.error('Could not copy to clipboard.')
+    }
+  }
 
   const loadCode = useCallback(async () => {
     if (codeText) return
@@ -241,7 +301,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
           )}
 
           <Tabs defaultValue="preview" onValueChange={(v) => v === 'code' && loadCode()}>
-            <TabsList className="mb-3 grid w-full max-w-[360px] grid-cols-3 border border-zinc-800 bg-zinc-900">
+            <TabsList className="mb-3 grid w-full max-w-[480px] grid-cols-4 border border-zinc-800 bg-zinc-900">
               <TabsTrigger value="preview" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
                 <Monitor className="h-3.5 w-3.5" aria-hidden /> Preview
               </TabsTrigger>
@@ -250,6 +310,9 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
               </TabsTrigger>
               <TabsTrigger value="code" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
                 <Code2 className="h-3.5 w-3.5" aria-hidden /> Code
+              </TabsTrigger>
+              <TabsTrigger value="rebuild" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
+                <Sparkles className="h-3.5 w-3.5" aria-hidden /> AI Rebuild
               </TabsTrigger>
             </TabsList>
 
@@ -377,6 +440,125 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                 <pre className="cloner-scroll max-h-[62vh] min-h-[440px] overflow-auto p-4 font-mono text-[11px] leading-relaxed text-zinc-400">
                   <code>{codeLoading ? 'Loading source…' : codeText ?? 'Open the Code tab to load the source.'}</code>
                 </pre>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="rebuild" className="mt-0">
+              <div className="overflow-hidden rounded-xl border border-zinc-800 bg-zinc-900/60">
+                {rebuildLoading && (
+                  <div className="flex h-[62vh] min-h-[440px] flex-col items-center justify-center gap-4 bg-zinc-950">
+                    <div className="relative">
+                      <Sparkles className="h-10 w-10 animate-pulse text-emerald-400" aria-hidden />
+                      <span className="absolute -inset-4 animate-ping rounded-full border border-emerald-500/20" aria-hidden />
+                    </div>
+                    <p className="text-sm font-medium text-zinc-200">{REBUILD_STEPS[rebuildStep]}</p>
+                    <p className="max-w-sm text-center text-xs text-zinc-500">
+                      The AI is rewriting the captured page as clean semantic code — this typically takes 1–3 minutes.
+                    </p>
+                  </div>
+                )}
+
+                {!rebuildLoading && rebuildError && (
+                  <div className="flex h-[62vh] min-h-[440px] flex-col items-center justify-center gap-4 bg-zinc-950 p-6">
+                    <AlertTriangle className="h-8 w-8 text-amber-400" aria-hidden />
+                    <p className="max-w-md text-center text-sm text-zinc-300">{rebuildError}</p>
+                    <Button size="sm" onClick={ensureRebuild} className="gap-1.5 bg-emerald-500 font-semibold text-zinc-950 hover:bg-emerald-400">
+                      <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Retry rebuild
+                    </Button>
+                  </div>
+                )}
+
+                {!rebuildLoading && !rebuildError && rebuild && (
+                  <>
+                    <div className="flex flex-wrap items-center justify-between gap-2 border-b border-zinc-800 bg-zinc-900/80 px-3 py-2">
+                      <div className="flex items-center gap-1" role="tablist" aria-label="Rebuild output view">
+                        {(
+                          [
+                            ['preview', Monitor, 'Preview'],
+                            ['html', Code2, 'HTML + Tailwind'],
+                            ['react', Wand2, 'React'],
+                          ] as const
+                        ).map(([v, Icon, label]) => (
+                          <button
+                            key={v}
+                            role="tab"
+                            aria-selected={rebuildView === v}
+                            onClick={() => setRebuildView(v)}
+                            className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
+                              rebuildView === v
+                                ? 'bg-emerald-500/15 text-emerald-300'
+                                : 'text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300'
+                            }`}
+                          >
+                            <Icon className="mr-1 inline h-3 w-3" aria-hidden />
+                            {label}
+                          </button>
+                        ))}
+                      </div>
+                      <div className="flex items-center gap-1.5">
+                        <button
+                          onClick={() => copyRebuild(rebuildView === 'react' ? rebuild.react : rebuild.code, rebuildView === 'react' ? 'React component' : 'HTML')}
+                          aria-label="Copy rebuilt code"
+                          className="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+                        >
+                          <Copy className="h-4 w-4" aria-hidden />
+                        </button>
+                        <a
+                          href={`/api/download/${id}?format=rebuild&page=${activeSlug}`}
+                          target="_blank"
+                          rel="noreferrer"
+                          aria-label="Download rebuilt HTML"
+                          className="rounded-md p-2 text-zinc-500 transition-colors hover:bg-zinc-800 hover:text-zinc-300"
+                        >
+                          <Download className="h-4 w-4" aria-hidden />
+                        </a>
+                      </div>
+                    </div>
+
+                    {rebuildView === 'preview' && (
+                      <div className="flex justify-center bg-zinc-950 p-0 sm:p-4">
+                        <iframe
+                          srcDoc={rebuild.previewHtml}
+                          title="AI rebuilt page preview"
+                          sandbox="allow-same-origin"
+                          className="h-[62vh] min-h-[440px] w-full border-0 bg-white transition-all duration-300 sm:rounded-lg sm:shadow-2xl sm:shadow-black/60"
+                        />
+                      </div>
+                    )}
+
+                    {rebuildView === 'html' && (
+                      <pre className="cloner-scroll max-h-[62vh] min-h-[440px] overflow-auto bg-zinc-950 p-4 font-mono text-[11px] leading-relaxed text-emerald-200/80">
+                        <code>{rebuild.code}</code>
+                      </pre>
+                    )}
+
+                    {rebuildView === 'react' && (
+                      <pre className="cloner-scroll max-h-[62vh] min-h-[440px] overflow-auto bg-zinc-950 p-4 font-mono text-[11px] leading-relaxed text-sky-200/80">
+                        <code>{rebuild.react ?? 'React output unavailable for this page.'}</code>
+                      </pre>
+                    )}
+
+                    <div className="flex items-center gap-2 border-t border-zinc-800 bg-zinc-900/60 px-4 py-2">
+                      <Sparkles className="h-3 w-3 text-emerald-500" aria-hidden />
+                      <p className="text-[11px] text-zinc-500">
+                        Generated by AI from the captured DOM — clean Tailwind utilities, semantic tags, no trackers. Review before production use.
+                      </p>
+                    </div>
+                  </>
+                )}
+
+                {!rebuildLoading && !rebuildError && !rebuild && (
+                  <div className="flex h-[62vh] min-h-[440px] flex-col items-center justify-center gap-4 bg-zinc-950 p-6">
+                    <Sparkles className="h-8 w-8 text-emerald-400" aria-hidden />
+                    <p className="text-sm font-medium text-zinc-200">Rebuild this page with AI</p>
+                    <p className="max-w-md text-center text-xs text-zinc-500">
+                      The engine will convert the captured DOM into clean, hand-readable HTML with Tailwind CSS — plus a React component — instead of the raw site dump.
+                    </p>
+                    <Button size="sm" onClick={ensureRebuild} className="gap-1.5 bg-emerald-500 font-semibold text-zinc-950 hover:bg-emerald-400">
+                      <Sparkles className="h-3.5 w-3.5" aria-hidden /> Rebuild with AI
+                    </Button>
+                  </div>
+                )}
               </div>
             </TabsContent>
           </Tabs>

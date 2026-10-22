@@ -60,3 +60,27 @@ Work Log:
 
 Stage Summary:
 - User-facing downloads ready: download/famsuptasks-clone.zip, download/cloneforge-source.zip
+
+---
+Task ID: 4
+Agent: main (Z.ai)
+Task: Add AI Rebuild feature (clone -> clean Tailwind HTML + React component via GLM)
+
+Work Log:
+- Loaded LLM skill; z-ai-web-dev-sdk already installed; added serverExternalPackages to next.config.ts
+- Built src/lib/cloner/rebuild.ts:
+  - slimForRebuild: strips scripts/styles/comments/base64/long attrs + cheerio removal of announcer/progressier junk
+  - extractOverlay: isolates the open modal branch for interaction-state pages (fixed inset-0 / modal / dialog heuristics)
+  - extractUnits: deterministic rebuild units - descends framework wrapper divs to the shallowest sibling level, batches <=12KB (no mid-element cuts)
+  - Generation: batch mode = independent best-of-N attempts scored by text-probe fidelity (missingProbes vs source DOM); single-shot mode = append-continuation until </html>; 429 retry w/ backoff + semaphore(3) concurrency cap
+  - dedupeSections, ensureCdnScript, toPreviewHtml (compiled site CSS + CDN, asset refs -> /api/asset/<id>/)
+  - Preview derived at read time; stores rebuild/<slug>.html + .tsx only
+- API: POST/GET /api/rebuild/[id]?page=slug; GET /api/asset/[id]/[...path] (serves mirror assets); download format=rebuild
+- UI: 4th workspace tab "AI Rebuild" with Preview / HTML + Tailwind / React sub-views, copy + download, animated progress, error retry
+- Fixed through 6 debug iterations: (1) output-token truncation -> auto-continuation; (2) hallucinated endings -> continuation prompts now carry full source DOM; (3) mid-section chunk cuts -> cheerio body-children extraction; (4) empty-fragment replies -> hasContent detection + retry; (5) runaway 79KB append loops -> best-of retry + runaway guard; (6) giant-SVG preview -> ensureCdnScript + compiled CSS + CDN cascade
+- Verified vs famsu clone d8d9e11187c2: index rebuild 29KB/2.5min with ALL real sections (hero, stats, how-it-works, features, dashboard, testimonials, FAQ, CTA, footer) - zero hallucinations, zero missing probes; sign-up state 5KB overlay-only rebuild in 17s with full form
+- E2E via agent-browser: AI Rebuild tab loads cache, preview renders rebuilt page with real assets, HTML/React code views work, zero console errors
+
+Stage Summary:
+- AI Rebuild v1 shipped: captured DOM -> clean semantic Tailwind HTML + React TSX, verified by automated text-probe fidelity checks
+- Screenshots: download/rebuild-index.png, download/rebuild-signup.png, download/e2e-rebuild-tab.png, download/e2e-react-view.png

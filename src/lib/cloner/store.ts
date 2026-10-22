@@ -63,6 +63,18 @@ export async function readMeta(id: string): Promise<CloneMeta | null> {
   }
 }
 
+/** Serve a single file from a clone's mirror/assets/ folder (for AI-rebuild previews). */
+export async function readMirrorAsset(id: string, relPath: string): Promise<Buffer | null> {
+  const clean = relPath.replace(/\\/g, '/')
+  if (clean.includes('..') || !clean.startsWith('assets/')) return null
+  if (!/^[a-z0-9/._-]+$/i.test(clean)) return null
+  try {
+    return await readFile(path.join(cloneDir(id), 'mirror', clean))
+  } catch {
+    return null
+  }
+}
+
 export async function readMirrorFiles(id: string): Promise<Map<string, Buffer> | null> {
   const mirrorRoot = path.join(cloneDir(id), 'mirror')
   const out = new Map<string, Buffer>()

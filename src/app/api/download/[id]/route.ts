@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server'
 import JSZip from 'jszip'
 import { readMeta, readMirrorFiles, readSingleHtml } from '@/lib/cloner/store'
+import { readRebuild } from '@/lib/cloner/rebuild'
 
 export const runtime = 'nodejs'
 export const dynamic = 'force-dynamic'
@@ -20,6 +21,20 @@ export async function GET(req: NextRequest, ctx: { params: Promise<{ id: string 
     return NextResponse.json({ error: 'Clone not found or expired.' }, { status: 404 })
   }
   const name = safeFileName(meta.title, meta.id)
+
+  if (format === 'rebuild') {
+    const rebuilt = await readRebuild(id, page)
+    if (!rebuilt) {
+      return NextResponse.json({ error: 'No AI rebuild for this page yet.' }, { status: 404 })
+    }
+    const suffix = page && page !== 'index' ? `-${page}` : ''
+    return new NextResponse(rebuilt.code, {
+      headers: {
+        'Content-Type': 'text/html; charset=utf-8',
+        'Content-Disposition': `attachment; filename="${name}-tailwind${suffix}.html"`,
+      },
+    })
+  }
 
   if (format === 'single') {
     const html = await readSingleHtml(id, page)
