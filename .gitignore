@@ -52,3 +52,14 @@ prompt
 server.log
 # Skills directory
 /skills/
+# clonethat runtime artifacts (never publish)
+/clones/
+/tool-results/
+/download/
+/upload/
+/db/
+/worklog.md
+/skills/
+/examples/
+/tests/
+/Caddyfile
