@@ -105,3 +105,15 @@ Stage Summary:
 - Clone/rebuild no longer break on gateway timeouts: every request is short; progress is real (engine hooks), UI never parses non-JSON
 - Mobile: app fully usable at 390px; cloned + rebuilt pages carry viewport meta
 - Screenshots: download/mobile-home.png, mobile-progress.png, mobile-workspace.png, mobile-rebuild-running.png, mobile-rebuild-done.png, desktop-final.png
+
+---
+Task ID: 6
+Agent: main (Z.ai)
+Task: Advisory — harden engine, Vercel deployment path, public free-tool launch (fame/anonymity/monetization)
+
+Work Log:
+- Audited codebase for deployment blockers: z-ai-web-dev-sdk confined to src/lib/cloner/rebuild.ts (single point to abstract); jobs are file-backed (clones/.jobs); store is filesystem (clones/); playwright-core + local Chromium (~/.cache/ms-playwright); validateTargetUrl already has SSRF guard
+- Researched current platform limits (Oct 2026): Vercel Fluid compute — Hobby max duration now 300s, Pro 800s (1800s beta); bundle 250MB uncompressed, Large Functions beta up to 5GB; Hobby fair-use = non-commercial only; QStash free = 1,000 msgs/day, delivery endpoint may run up to 15 min on free tier
+
+Stage Summary:
+- Recommended plan delivered: (1) guardrails before public launch (ToS/consent gate, ephemeral storage, rate limit, DMCA contact, "rebuild tool" positioning); (2) platform abstraction Phase 1 (LLMProvider: zai|openai-compatible|byok; JobStore: file|redis; Storage: fs|blob|stream-and-toss); (3) two deploy architectures — 100% serverless (remote CDP browser) vs hybrid worker (Vercel UI + Fly/Railway/Oracle worker); awaiting user decision on architecture + BYOK model before Phase 1 implementation
