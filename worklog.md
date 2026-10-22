@@ -84,3 +84,24 @@ Work Log:
 Stage Summary:
 - AI Rebuild v1 shipped: captured DOM -> clean semantic Tailwind HTML + React TSX, verified by automated text-probe fidelity checks
 - Screenshots: download/rebuild-index.png, download/rebuild-signup.png, download/e2e-rebuild-tab.png, download/e2e-react-view.png
+
+---
+Task ID: 5
+Agent: main (Z.ai)
+Task: Fix "Unexpected token 'I', "Internal S"... is not valid JSON" clone error + mobile optimization
+
+Work Log:
+- Root cause: multi-minute clone/rebuild requests hold one HTTP connection open; gateways/proxies in front of the preview kill slow requests and return plain-text "Internal Server Error", which the client's res.json() chokes on. Proven server-side: a killed client's clone still completed and saved (clones/996902c226fc).
+- Built src/lib/cloner/jobs.ts: file-backed job registry (clones/.jobs/<id>.json) with create/read/update, 2h TTL pruning; survives dev-server reloads
+- cloneSite/rebuildPage now accept onProgress(step, message); hooks placed at fetch, render, auto-heal, interaction replay, crawl, asset download, packaging / DOM read, token extraction, Tailwind rebuild, React generation, polish
+- API: POST /api/clone and POST /api/rebuild/[id] now start background jobs and return {jobId} in <300ms; new GET /api/jobs/[id] poll endpoint (always JSON, 404 with friendly message if server restarted); /api/clones + /api/clones/[id] wrapped in try/catch so every route returns JSON
+- Client: safeJson() helper (parses text first, never throws "Unexpected token"); clone() = start job -> poll every 2s -> real progress steps + live emerald status line -> load clone meta on done; tolerate up to 7 consecutive poll failures; 10min deadline. ensureRebuild() same pattern. Removed fake progress timers.
+- Mobile: ensureViewportMeta post-processing on AI-rebuilt HTML (verified in stored rebuild/index.html); preview route injects viewport meta into cloned pages lacking it; hero badge wraps instead of overflowing at 390px; workspace Tabs = icons-only below sm (AI chip collapses to "AI")
+- tsconfig excludes clones/download/.next (stored rebuild artifacts broke tsc); fixed cheerio.Element -> domhandler AnyNode in extractUnits
+- E2E at 390px: cloned famsuptasks.com/register via UI (POST 241ms, polled job, auto-heal + 3 captures, workspace rendered); ran AI rebuild via UI (job done in 309s, preview shows real headlines/CTAs, responsive); desktop 1440px unchanged; lint + tsc clean
+- Repackaged cloneforge-source.zip (130 files incl. jobs.ts + jobs API); refreshed famsuptasks-clone.zip
+
+Stage Summary:
+- Clone/rebuild no longer break on gateway timeouts: every request is short; progress is real (engine hooks), UI never parses non-JSON
+- Mobile: app fully usable at 390px; cloned + rebuilt pages carry viewport meta
+- Screenshots: download/mobile-home.png, mobile-progress.png, mobile-workspace.png, mobile-rebuild-running.png, mobile-rebuild-done.png, desktop-final.png

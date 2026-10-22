@@ -103,6 +103,8 @@ export interface CloneOptions {
   keepScripts: boolean
   renderMode: RenderMode
   crawl: boolean
+  /** optional progress sink for background jobs (step index + human message) */
+  onProgress?: (step: number, message: string) => void
 }
 
 export const ASSET_BUDGET = {

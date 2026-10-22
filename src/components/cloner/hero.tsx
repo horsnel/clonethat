@@ -74,8 +74,11 @@ export function Hero({ loading, onClone, initialUrl = '' }: HeroProps) {
           animate={{ opacity: 1, y: 0 }}
           transition={{ duration: 0.45 }}
         >
-          <Badge variant="outline" className="mb-5 gap-1.5 border-emerald-500/40 bg-emerald-500/10 text-emerald-300">
-            <Sparkles className="h-3 w-3" aria-hidden />
+          <Badge
+            variant="outline"
+            className="mb-5 max-w-full flex-wrap justify-center gap-1.5 whitespace-normal border-emerald-500/40 bg-emerald-500/10 px-3 py-1 text-center text-[11px] leading-relaxed text-emerald-300 sm:text-xs"
+          >
+            <Sparkles className="h-3 w-3 shrink-0" aria-hidden />
             Chromium rendering · interaction replay · multi-page crawl
           </Badge>
           <h1 className="text-balance text-4xl font-bold tracking-tight sm:text-6xl">

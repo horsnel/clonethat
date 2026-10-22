@@ -8,7 +8,7 @@ import { Tabs, TabsContent, TabsList, TabsTrigger } from '@/components/ui/tabs'
 import { Badge } from '@/components/ui/badge'
 import { AnalysisPanel } from './analysis-panel'
 import type { ClonePageInfo, CloneMeta } from '@/lib/cloner/types'
-import { formatBytes, hostnameOf, type CloneResponse } from './shared'
+import { formatBytes, hostnameOf, safeJson, sleep, type CloneResponse, type JobStateUi } from './shared'
 import {
   AlertTriangle, Check, Code2, Copy, Download, ExternalLink,
   FileArchive, Info, Layers, Loader2, Monitor, MousePointerClick,
@@ -104,13 +104,53 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
     setRebuildLoading(true)
     setRebuildError(null)
     try {
+      // 1. cached?
       let res = await fetch(`/api/rebuild/${id}?page=${activeSlug}`)
-      if (res.status === 404) {
-        res = await fetch(`/api/rebuild/${id}?page=${activeSlug}`, { method: 'POST' })
+      let data = await safeJson<{ exists: boolean; error?: string; jobId?: string; code?: string; react?: string | null; previewHtml?: string }>(res)
+
+      // 2. not cached -> start the background rebuild job, then poll it.
+      //    The job pattern keeps every HTTP request short so no gateway can
+      //    kill a multi-minute rebuild (which used to surface as a broken
+      //    JSON parse error in the UI).
+      if (!data.exists && res.status === 404) {
+        const startRes = await fetch(`/api/rebuild/${id}?page=${activeSlug}`, { method: 'POST' })
+        const start = await safeJson<{ jobId?: string; error?: string }>(startRes)
+        if (!startRes.ok || !start.jobId) {
+          throw new Error(start.error || `Could not start the rebuild (HTTP ${startRes.status}).`)
+        }
+        const deadline = Date.now() + 10 * 60 * 1000
+        let consecutiveFailures = 0
+        let done: JobStateUi | null = null
+        while (Date.now() < deadline) {
+          await sleep(2000)
+          try {
+            const jobRes = await fetch(`/api/jobs/${start.jobId}`)
+            const jobData = await safeJson<{ ok: boolean; job?: JobStateUi }>(jobRes)
+            if (jobData.ok && jobData.job) {
+              consecutiveFailures = 0
+              done = jobData.job
+              const idx = REBUILD_STEPS.findIndex((s) => jobData.job!.message.startsWith(s.slice(0, 10)))
+              if (idx >= 0) setRebuildStep(idx)
+              if (jobData.job.status === 'done' || jobData.job.status === 'error') break
+            }
+          } catch {
+            consecutiveFailures++
+            if (consecutiveFailures >= 8) throw new Error('Lost contact with the server while rebuilding.')
+          }
+        }
+        if (!done) throw new Error('The AI rebuild timed out after 10 minutes.')
+        if (done.status === 'error') throw new Error(done.error || 'AI rebuild failed.')
+
+        // 3. job finished -> read the persisted rebuild
+        res = await fetch(`/api/rebuild/${id}?page=${activeSlug}`)
+        data = await safeJson<{ exists: boolean; code?: string; react?: string | null; previewHtml?: string; error?: string }>(res)
       }
-      const data = await res.json()
-      if (!res.ok || !data.exists) throw new Error(data.error ?? 'Rebuild unavailable.')
-      setRebuild({ code: data.code, react: data.react, previewHtml: data.previewHtml })
+
+      if (!res.ok || !data.exists || !data.code) {
+        throw new Error(data.error ?? 'Rebuild unavailable.')
+      }
+      setRebuild({ code: data.code, react: data.react ?? null, previewHtml: data.previewHtml ?? '' })
+      setRebuildStep(REBUILD_STEPS.length - 1)
     } catch (e) {
       setRebuildError(e instanceof Error ? e.message : 'AI rebuild failed.')
     } finally {
@@ -302,17 +342,17 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
 
           <Tabs defaultValue="preview" onValueChange={(v) => v === 'code' && loadCode()}>
             <TabsList className="mb-3 grid w-full max-w-[480px] grid-cols-4 border border-zinc-800 bg-zinc-900">
-              <TabsTrigger value="preview" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
-                <Monitor className="h-3.5 w-3.5" aria-hidden /> Preview
+              <TabsTrigger value="preview" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
+                <Monitor className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="hidden sm:inline">Preview</span>
               </TabsTrigger>
-              <TabsTrigger value="compare" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
-                <SplitSquareHorizontal className="h-3.5 w-3.5" aria-hidden /> Compare
+              <TabsTrigger value="compare" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
+                <SplitSquareHorizontal className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="hidden sm:inline">Compare</span>
               </TabsTrigger>
-              <TabsTrigger value="code" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
-                <Code2 className="h-3.5 w-3.5" aria-hidden /> Code
+              <TabsTrigger value="code" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
+                <Code2 className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="hidden sm:inline">Code</span>
               </TabsTrigger>
-              <TabsTrigger value="rebuild" className="gap-1.5 data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
-                <Sparkles className="h-3.5 w-3.5" aria-hidden /> AI Rebuild
+              <TabsTrigger value="rebuild" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
+                <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="sm:hidden">AI</span> <span className="hidden sm:inline">AI Rebuild</span>
               </TabsTrigger>
             </TabsList>
 

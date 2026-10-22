@@ -437,6 +437,7 @@ function staticTextLength(html: string): number {
 }
 
 async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
+  const onProgress = opts.onProgress ?? (() => {})
   const warnings: string[] = []
   const sources: Omit<PageSource, 'slug'>[] = []
   let autoHealed: AcquireResult['autoHealed'] = null
@@ -444,6 +445,7 @@ async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
   let renderModeUsed: RenderMode = opts.renderMode
 
   // -- static fetch of the entry page (with one retry) ---------------------
+  onProgress(0, 'Fetching the page & following redirects…')
   let page = await fetchPage(opts.url)
   if (!page.ok && !page.body && page.error) {
     page = await fetchPage(opts.url) // single retry for flaky networks
@@ -466,6 +468,7 @@ async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
   let interactions: InteractionCandidate[] = []
 
   if (needsBrowser) {
+    onProgress(1, 'Rendering in headless Chromium (JS executed)…')
     const rp: RenderedPage | null = await renderPage(opts.url)
     if (rp) {
       rendered = true
@@ -480,6 +483,7 @@ async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
       // -- auto-healing: /register-style URLs that render a 404 view -------
       if (looksLikeNotFound(rp.textSample) && rp.finalUrl) {
         const root = new URL(rp.finalUrl).origin + '/'
+        onProgress(1, 'Requested URL looks like a 404 — healing to the site root…')
         const rootRender = await renderPage(root, { discover: true })
         if (rootRender && !looksLikeNotFound(rootRender.textSample)) {
           autoHealed = {
@@ -520,6 +524,9 @@ async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
   })
 
   // -- interaction states (browser only) ------------------------------------
+  if (rendered && interactions.length > 0) {
+    onProgress(2, 'Replaying interactions to capture hidden UI…')
+  }
   if (rendered) {
     let captured = 0
     for (const candidate of interactions) {
@@ -544,6 +551,7 @@ async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
 
   // -- crawl same-origin links ----------------------------------------------
   if (opts.crawl) {
+    onProgress(3, 'Crawling linked pages…')
     const scan = scanPage(sources[0] as PageSource, new AssetStore())
     const origin = new URL(entryFinal).origin
     const seen = new Set<string>([normalizeForMap(entryFinal), origin])
@@ -585,6 +593,7 @@ async function acquirePages(opts: CloneOptions): Promise<AcquireResult> {
 
 export async function cloneSite(opts: CloneOptions): Promise<CloneResult> {
   const startedAt = Date.now()
+  const onProgress = opts.onProgress ?? (() => {})
   const warnings: string[] = []
 
   const [robotsRestricted, acquired] = await Promise.all([
@@ -621,6 +630,7 @@ export async function cloneSite(opts: CloneOptions): Promise<CloneResult> {
   }
 
   // -- fetch stylesheets (recursive, shared across pages) -------------------
+  onProgress(3, `Downloading stylesheets & assets (${allTasks.length} found)…`)
   const cssUrls = [...cssResults.keys()]
   await Promise.all(cssUrls.map(async (u) => {
     const r = await loadCss(u, 0, store, u)
@@ -633,6 +643,7 @@ export async function cloneSite(opts: CloneOptions): Promise<CloneResult> {
   if (store.truncated) warnings.push('Asset budget reached — some assets were skipped and remain remote URLs.')
 
   // -- link map for offline navigation between cloned pages -----------------
+  onProgress(4, 'Rewriting URLs, analyzing stack & packaging…')
   const linkMap = new Map<string, string>()
   for (const s of sources) {
     if (s.kind === 'state') continue

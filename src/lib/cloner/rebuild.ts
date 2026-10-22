@@ -1,6 +1,7 @@
 import { readFile, writeFile, mkdir } from 'fs/promises'
 import path from 'path'
 import * as cheerio from 'cheerio'
+import type { AnyNode } from 'domhandler'
 import ZAI from 'z-ai-web-dev-sdk'
 import type { CloneMeta, ClonePageInfo } from './types'
 
@@ -112,7 +113,7 @@ export function extractOverlay(doc: string): string | null {
  */
 export function extractUnits(doc: string): string[] {
   const raw: string[] = []
-  const collect = ($: cheerio.CheerioAPI, els: cheerio.Element[], depth: number): void => {
+  const collect = ($: cheerio.CheerioAPI, els: AnyNode[], depth: number): void => {
     for (const el of els) {
       const cls = ($(el).attr('class') ?? '') + ' ' + ($(el).attr('style') ?? '')
       if (JUNK_RE.test(cls) && depth > 0) continue
@@ -515,7 +516,16 @@ async function collectCompiledCss(id: string, mirrorHtml: string): Promise<strin
   return chunks.join('\n\n')
 }
 
-/** Guarantee the Tailwind CDN script exists in the document head (deterministic post-fix). */
+/** Guarantee a viewport meta tag exists (deterministic post-fix for mobile rendering). */
+function ensureViewportMeta(code: string): string {
+  if (/name=["']viewport["']/i.test(code)) return code
+  const tag = '<meta name="viewport" content="width=device-width, initial-scale=1">'
+  if (/<head[^>]*>/i.test(code)) return code.replace(/<head[^>]*>/i, (m) => `${m}\n ${tag}`)
+  if (/<meta charset[^>]*>/i.test(code)) return code.replace(/<meta charset[^>]*>/i, (m) => `${m}\n${tag}`)
+  if (/<title[^>]*>/i.test(code)) return code.replace(/<title[^>]*>/i, (m) => `${tag}\n${m}`)
+  return `${tag}\n${code}`
+}
+
 function ensureCdnScript(code: string): string {
   if (/cdn\.tailwindcss\.com/i.test(code)) return code
   const tag = '<script src="https://cdn.tailwindcss.com"></' + 'script>'
@@ -552,7 +562,12 @@ export interface RebuildOutcome extends RebuildPayload {
   durationMs: number
 }
 
-export async function rebuildPage(id: string, slug: string | null, meta: CloneMeta): Promise<RebuildOutcome> {
+export async function rebuildPage(
+  id: string,
+  slug: string | null,
+  meta: CloneMeta,
+  onProgress: (step: number, message: string) => void = () => {},
+): Promise<RebuildOutcome> {
   const s = safeSlug(slug)
   const started = Date.now()
 
@@ -579,6 +594,7 @@ export async function rebuildPage(id: string, slug: string | null, meta: CloneMe
   const batches = extractUnits(slim.doc)
   const batched = batches.length > 1 || (batches.length === 1 && slim.doc.length > FULL_REBUILD_LIMIT)
   const sourceParts = batched ? batches : [slim.doc]
+  onProgress(2, `Rebuilding layout with Tailwind… (${sourceParts.length} section group${sourceParts.length > 1 ? 's' : ''})`)
 
   // 4. compiled CSS for the preview shell
   const compiledCss = await collectCompiledCss(id, mirrorHtml)
@@ -619,6 +635,7 @@ export async function rebuildPage(id: string, slug: string | null, meta: CloneMe
   const [htmlRes, reactRes] = await Promise.allSettled([
     (async () => {
       const parts = await Promise.all(sourceParts.map((part) => limit(() => generateHtml(part))))
+      onProgress(3, 'Generating React component…')
       const body = parts.join('\n')
       return batched ? htmlShell(meta.analysis.title || meta.title, meta.analysis.lang, body) : body
     })(),
@@ -633,12 +650,13 @@ export async function rebuildPage(id: string, slug: string | null, meta: CloneMe
     throw new Error(`AI rebuild failed: ${htmlRes.reason instanceof Error ? htmlRes.reason.message : String(htmlRes.reason)}`)
   }
 
-  const code = ensureCdnScript(htmlRes.value)
+  const code = ensureViewportMeta(ensureCdnScript(htmlRes.value))
   if (!code.toLowerCase().includes('<!doctype') && !code.toLowerCase().includes('<html')) {
     throw new Error('AI returned unexpected output (no HTML document detected)')
   }
   const react = reactRes.status === 'fulfilled' ? stripFences(reactRes.value) : null
   const previewHtml = toPreviewHtml(code, id, compiledCss)
+  onProgress(4, 'Polishing the code…')
 
   // 5. persist (preview shell is derived at read time)
   const dir = path.join(cloneDir(id), 'rebuild')

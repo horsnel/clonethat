@@ -5,8 +5,8 @@ import { motion } from 'framer-motion'
 import { toast } from 'sonner'
 import { Hero } from '@/components/cloner/hero'
 import { Workspace } from '@/components/cloner/workspace'
-import type { CloneResponse, CloneListItem, RenderModeUi } from '@/components/cloner/shared'
-import { formatBytes, formatDate, hostnameOf } from '@/components/cloner/shared'
+import type { CloneResponse, CloneListItem, RenderModeUi, JobStateUi } from '@/components/cloner/shared'
+import { formatBytes, formatDate, hostnameOf, safeJson, sleep } from '@/components/cloner/shared'
 import { Check, Globe, History, Loader2, ShieldCheck, TriangleAlert } from 'lucide-react'
 
 type View = { kind: 'idle' } | { kind: 'cloning' } | { kind: 'done'; result: CloneResponse }
@@ -22,6 +22,7 @@ const STEPS = [
 export default function Home() {
   const [view, setView] = useState<View>({ kind: 'idle' })
   const [progressStep, setProgressStep] = useState(0)
+  const [progressMsg, setProgressMsg] = useState('')
   const [error, setError] = useState<string | null>(null)
   const [history, setHistory] = useState<CloneListItem[]>([])
   const [historyLoading, setHistoryLoading] = useState(false)
@@ -31,7 +32,7 @@ export default function Home() {
     setHistoryLoading(true)
     try {
       const res = await fetch('/api/clones')
-      const data = await res.json()
+      const data = await safeJson<{ ok: boolean; clones: CloneListItem[] }>(res)
       if (data.ok) setHistory(data.clones)
     } catch {
       /* history is best-effort */
@@ -42,14 +43,19 @@ export default function Home() {
 
   useEffect(() => { loadHistory() }, [loadHistory])
 
-  useEffect(() => {
-    if (view.kind !== 'cloning') return
-    setProgressStep(0)
-    const timer = setInterval(() => {
-      setProgressStep((s) => Math.min(s + 1, STEPS.length - 2))
-    }, 2200)
-    return () => clearInterval(timer)
-  }, [view.kind])
+  const loadCloneById = useCallback(async (id: string): Promise<CloneResponse> => {
+    const res = await fetch(`/api/clones/${id}`)
+    const data = await safeJson<{ ok: boolean; meta: CloneResponse['meta']; error?: string }>(res)
+    if (!res.ok || !data.ok) throw new Error(data.error || 'Clone not found.')
+    return {
+      ok: true,
+      id: data.meta.id,
+      meta: data.meta,
+      htmlPreview: '',
+      htmlTruncated: true,
+      htmlSize: data.meta.stats.singleBytes,
+    }
+  }, [])
 
   const clone = useCallback(async (
     url: string,
@@ -57,9 +63,12 @@ export default function Home() {
   ) => {
     lastUrl.current = url
     setError(null)
+    setProgressMsg('Starting the clone engine…')
     setView({ kind: 'cloning' })
     try {
-      const res = await fetch('/api/clone', {
+      // 1. kick off the background job — returns in well under a second,
+    //    so no proxy/gateway can time the request out
+      const startRes = await fetch('/api/clone', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
@@ -69,15 +78,48 @@ export default function Home() {
           crawl: opts.crawl,
         }),
       })
-      const data = (await res.json()) as CloneResponse
-      if (!res.ok || !data.ok) {
-        throw new Error(data.error || `Cloning failed (HTTP ${res.status}).`)
+      const start = await safeJson<{ ok: boolean; jobId?: string; error?: string }>(startRes)
+      if (!startRes.ok || !start.ok || !start.jobId) {
+        throw new Error(start.error || `Could not start the clone (HTTP ${startRes.status}).`)
       }
-      setView({ kind: 'done', result: data })
+
+      // 2. poll the job — every request is short, transient poll failures
+      //    are tolerated (the clone keeps running server-side)
+      const deadline = Date.now() + 10 * 60 * 1000
+      let consecutiveFailures = 0
+      let finished: JobStateUi | null = null
+      while (Date.now() < deadline) {
+        await sleep(2000)
+        try {
+          const res = await fetch(`/api/jobs/${start.jobId}`)
+          const data = await safeJson<{ ok: boolean; job?: JobStateUi; error?: string }>(res)
+          if (data.ok && data.job) {
+            consecutiveFailures = 0
+            finished = data.job
+            if (data.job.step > 0 || data.job.message) {
+              setProgressStep(Math.min(data.job.step, STEPS.length - 1))
+              setProgressMsg(data.job.message)
+            }
+            if (data.job.status === 'done' || data.job.status === 'error') break
+          }
+        } catch {
+          consecutiveFailures++
+          if (consecutiveFailures >= 8) {
+            throw new Error('Lost contact with the server while cloning. Please try again.')
+          }
+        }
+      }
+      if (!finished) throw new Error('The clone timed out after 10 minutes.')
+      if (finished.status === 'error') throw new Error(finished.error || 'Cloning failed.')
+      if (!finished.cloneId) throw new Error('Cloning finished but the result was lost — please try again.')
+
+      // 3. load the finished clone's metadata and show the workspace
+      const result = await loadCloneById(finished.cloneId)
+      setView({ kind: 'done', result })
       loadHistory()
-      const captures = data.meta.pages?.length ?? 1
+      const captures = result.meta.pages?.length ?? 1
       toast.success(
-        `Cloned ${hostnameOf(data.meta.finalUrl)} — ${data.meta.stats.requests} requests, ${captures} capture${captures > 1 ? 's' : ''}`
+        `Cloned ${hostnameOf(result.meta.finalUrl)} — ${result.meta.stats.requests} requests, ${captures} capture${captures > 1 ? 's' : ''}`
       )
     } catch (err) {
       const message = err instanceof Error ? err.message : 'Something went wrong while cloning.'
@@ -85,30 +127,18 @@ export default function Home() {
       setView({ kind: 'idle' })
       toast.error(message)
     }
-  }, [loadHistory])
+  }, [loadHistory, loadCloneById])
 
   const openFromHistory = useCallback(async (id: string) => {
     setView({ kind: 'cloning' })
     try {
-      const res = await fetch(`/api/clones/${id}`)
-      const data = await res.json()
-      if (!res.ok || !data.ok) throw new Error(data.error || 'Clone expired.')
-      setView({
-        kind: 'done',
-        result: {
-          ok: true,
-          id: data.meta.id,
-          meta: data.meta,
-          htmlPreview: '',
-          htmlTruncated: true,
-          htmlSize: data.meta.stats.singleBytes,
-        },
-      })
+      const result = await loadCloneById(id)
+      setView({ kind: 'done', result })
     } catch (err) {
       setView({ kind: 'idle' })
       toast.error(err instanceof Error ? err.message : 'Could not open that clone.')
     }
-  }, [])
+  }, [loadCloneById])
 
   return (
     <div className="flex min-h-screen flex-col bg-zinc-950 text-zinc-100">
@@ -161,6 +191,11 @@ export default function Home() {
             </div>
             <h2 className="text-lg font-semibold">Cloning {hostnameOf(lastUrl.current)}…</h2>
             <p className="mt-1 text-sm text-zinc-500">Browser rendering takes a little longer — usually 15–60s.</p>
+            {progressMsg && (
+              <p className="mt-2 max-w-sm text-center font-mono text-[11px] text-emerald-400/90" aria-live="polite">
+                {progressMsg}
+              </p>
+            )}
             <ol className="mt-8 w-full space-y-3">
               {STEPS.map((step, i) => {
                 const state = i < progressStep ? 'done' : i === progressStep ? 'active' : 'pending'

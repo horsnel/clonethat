@@ -1,0 +1,250 @@
+export default function Page() {
+  return (
+    <>
+<header className="px-4 pt-4 sm:px-8 lg:px-20">
+  <div className="mx-auto flex max-w-7xl items-center justify-between gap-4 rounded-full bg-[#F3F3F3] py-3 pr-3 pl-5 sm:pr-4 sm:pl-6">
+    <a href="index.html" className="relative block h-7 w-[110px] shrink-0 overflow-hidden">
+      <img src="assets/e050137dcb0b.png" alt="FamsUp" className="absolute max-w-none" style={{ height: "543.48%", width: "131.23%", left: "-15.49%", top: "-221.74%" }} />
+    </a>
+    <div className="hidden items-center gap-8 lg:flex">
+      <a href="mailto:partnership@famsup.com" className="text-base leading-6 font-medium text-[#080302] transition-colors hover:text-[#FF7300]">Contact Us</a>
+      <button type="button" className="text-base leading-6 font-medium text-[#080302] transition-colors hover:text-[#FF7300]">Log In</button>
+      <button type="button" className="flex items-center justify-center rounded-xl border border-[#FF7300] bg-[#FF7300] px-5 py-2.5 text-base leading-6 font-semibold text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] transition-colors hover:bg-[#e66800]">Sign Up</button>
+    </div>
+    <button type="button" aria-label="Open menu" className="flex size-10 items-center justify-center rounded-full border border-[#D0D5DD] bg-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] transition-colors hover:bg-[#F9F9F9] lg:hidden">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" className="size-5">
+        <path fill="none" stroke="#080302" stroke-width="1.75" stroke-linecap="round" d="M4 7h16M4 12h16M4 17h16"></path>
+      </svg>
+    </button>
+  </div>
+</header>
+<section className="px-4 pt-12 pb-16 sm:px-8 lg:px-20 lg:pt-20 lg:pb-24">
+  <div className="mx-auto grid max-w-7xl items-start gap-10 lg:grid-cols-[1.05fr_1fr] lg:gap-16">
+    <div className="flex flex-col gap-6">
+      <h1 className="text-center text-[40px] leading-[48px] font-semibold tracking-tight text-[#010310] lg:text-left lg:text-[64px] lg:leading-[72px] lg:tracking-[-0.02em]">Reach Real People.<br />Get Real Results.</h1>
+      <p className="mx-auto max-w-[480px] text-center text-base leading-6 text-[#666] lg:mx-0 lg:text-left lg:text-lg lg:leading-7">FamsupTasks helps advertisers boost engagement through users who complete simple online tasks.</p>
+      <div className="flex flex-col items-stretch gap-3 sm:flex-row sm:items-center">
+        <button type="button" className="flex w-full items-center justify-center rounded-lg border border-[#FF7300] bg-[#FF7300] px-4 py-3 text-sm leading-5 font-semibold text-white shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] transition-colors hover:bg-[#e66800] sm:w-auto sm:py-2.5">Start a Campaign</button>
+        <button type="button" className="flex w-full items-center justify-center gap-2 rounded-lg bg-[#F3F3F3] px-4 py-3 text-sm leading-5 font-semibold text-[#080302] transition-colors hover:bg-[#E8E8E8] sm:w-auto sm:py-2.5">Start Earning <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" className="size-4"><path fill="none" stroke="currentColor" stroke-width="1.667" stroke-linecap="round" stroke-linejoin="round" d="M5 10h10m-5-5 5 5-5 5"></path></svg></button>
+      </div>
+      <div className="mt-8 flex flex-col gap-6 lg:mt-12 lg:gap-8">
+        <div className="flex items-center gap-4">
+          <div className="h-px flex-1 bg-[#D0D5DD] lg:hidden"></div>
+          <p className="text-xs leading-[18px] font-medium whitespace-nowrap text-[#666]">Trusted by Users and Advertisers</p>
+          <div className="h-px flex-1 bg-[#D0D5DD]"></div>
+        </div>
+        <div className="grid grid-cols-2 gap-x-12 gap-y-8">
+          <div className="flex flex-col gap-1 text-center lg:text-left">
+            <p className="text-[36px] leading-[44px] font-semibold text-[#080302] lg:text-[48px] lg:leading-[56px]">700+</p>
+            <p className="text-sm leading-5 text-[#666]">Tasks Completed Daily</p>
+          </div>
+          <div className="flex flex-col gap-1 text-center lg:text-left">
+            <p className="text-[36px] leading-[44px] font-semibold text-[#080302] lg:text-[48px] lg:leading-[56px]">₦150M+</p>
+            <p className="text-sm leading-5 text-[#666]">Rewards Distributed</p>
+          </div>
+          <div className="flex flex-col gap-1 text-center lg:text-left">
+            <p className="text-[36px] leading-[44px] font-semibold text-[#080302] lg:text-[48px] lg:leading-[56px]">380K+</p>
+            <p className="text-sm leading-5 text-[#666]">Active Platform Users</p>
+          </div>
+          <div className="flex flex-col gap-1 text-center lg:text-left">
+            <p className="text-[36px] leading-[44px] font-semibold text-[#080302] lg:text-[48px] lg:leading-[56px]">120K+</p>
+            <p className="text-sm leading-5 text-[#666]">Campaigns Launched</p>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div className="relative -mx-4 sm:-mx-8 lg:mx-0">
+      <img src="assets/7379ddb9c4cb.png" alt="FamsupTasks dashboard on laptop" width="720" height="1024" decoding="async" className="w-full" />
+    </div>
+  </div>
+</section>
+<section className="px-4 py-16 sm:px-8 lg:px-20 lg:py-24">
+  <div className="mx-auto max-w-7xl">
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
+      <h2 className="text-[32px] leading-[40px] font-semibold text-[#010310] lg:text-[48px] lg:leading-[56px]">How FamsupTasks<br className="hidden lg:block" /> Works</h2>
+      <p className="max-w-[420px] text-base leading-6 text-[#666] lg:text-lg lg:leading-7">Launch campaigns, complete tasks, and manage rewards from one simple platform.</p>
+    </div>
+    <div className="mt-12 grid grid-cols-1 gap-10 sm:grid-cols-3 lg:mt-20 lg:gap-12">
+      <div className="flex flex-col gap-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="size-8 text-[#080302]">
+          <g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="13" cy="10" r="4"></circle>
+            <path d="M5 26c0-4 4-7 8-7s8 3 8 7"></path>
+            <path d="M22 18v6m-3-3h6"></path>
+          </g>
+        </svg>
+        <h3 className="text-lg leading-7 font-semibold text-[#080302]">Create an Account</h3>
+        <p className="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Sign up and access tools for earning rewards or creating campaigns.</p>
+      </div>
+      <div className="flex flex-col gap-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="size-8 text-[#080302]">
+          <g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="6" width="24" height="20" rx="3"></rect>
+            <path d="m9 14 2 2 4-5M9 22h12"></path>
+          </g>
+        </svg>
+        <h3 className="text-lg leading-7 font-semibold text-[#080302]">Launch or Complete Tasks</h3>
+        <p className="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Create engagement campaigns or perform tasks from other users across supported platforms.</p>
+      </div>
+      <div className="flex flex-col gap-4">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" className="size-8 text-[#080302]">
+          <g fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="4" y="6" width="24" height="20" rx="3"></rect>
+            <path d="M10 22V14m6 8v-4m6 4v-10"></path>
+          </g>
+        </svg>
+        <h3 className="text-lg leading-7 font-semibold text-[#080302]">Track Results &amp; Rewards</h3>
+        <p className="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Monitor campaign performance or receive rewards directly to your wallet.</p>
+      </div>
+    </div>
+  </div>
+</section>
+<section className="px-4 py-16 sm:px-8 lg:px-20 lg:py-24">
+  <div className="mx-auto max-w-7xl">
+    <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-12">
+      <h2 className="text-[32px] leading-[40px] font-semibold text-[#010310] lg:text-[48px] lg:leading-[56px]">Everything You Need to<br className="hidden lg:block" /> Grow and Earn</h2>
+      <p className="max-w-[420px] text-base leading-6 text-[#666] lg:text-lg lg:leading-7">FamsupTasks combines engagement tools, campaign management, and rewards into one streamlined platform.</p>
+    </div>
+    <div className="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-16 lg:grid-cols-3 lg:gap-6">
+      <div className="relative flex flex-col gap-5 overflow-hidden rounded-3xl bg-[#FFF4EB] p-6 sm:col-span-2 lg:col-span-2 lg:h-[320px] lg:flex-row lg:items-center lg:gap-8 lg:p-6">
+        <div className="lg:max-w-[387px] lg:flex-1">
+          <h3 className="text-xl leading-8 font-semibold text-[#080302] lg:text-2xl">Campaign Creation</h3>
+          <p className="mt-3 text-base leading-7 text-[#666] lg:text-lg">Launch engagement tasks for social platforms, websites, and online communities.</p>
+        </div>
+        <img src="assets/4bf675aa2321.webp" alt="Create task form" width="560" height="1059" decoding="async" className="w-full max-w-[260px] self-center lg:absolute lg:top-8 lg:right-6 lg:bottom-auto lg:h-[530px] lg:w-[280px] lg:max-w-none lg:self-auto" />
+      </div>
+      <div className="relative flex flex-col gap-5 overflow-hidden rounded-3xl bg-[#F3F3F3] p-6 lg:col-start-3 lg:row-span-2 lg:row-start-1 lg:h-[664px] lg:p-6">
+        <div className="relative z-10">
+          <h3 className="text-xl leading-8 font-semibold text-[#080302] lg:text-2xl">Task Marketplace</h3>
+          <p className="mt-3 text-base leading-7 text-[#666] lg:text-lg">Discover available tasks and earn rewards for completing online activities.</p>
+        </div>
+        <img src="assets/11892ae6f9b8.webp" alt="Task cards" width="1400" height="496" decoding="async" className="mt-auto w-full lg:absolute lg:right-[-30%] lg:bottom-[-10%] lg:left-[-30%] lg:mt-0 lg:w-[160%] lg:max-w-none lg:-rotate-[10deg]" />
+      </div>
+      <div className="relative flex flex-col gap-5 overflow-hidden rounded-3xl bg-[#F3F3F3] p-6 lg:h-[320px] lg:p-6">
+        <div>
+          <h3 className="text-xl leading-8 font-semibold text-[#080302] lg:text-2xl">Wallet System</h3>
+          <p className="mt-3 text-base leading-7 text-[#666] lg:text-lg">Manage earnings, campaign funding, withdrawals, and transactions in one place.</p>
+        </div>
+        <img src="assets/ea462776a088.webp" alt="Wallet balance" width="600" height="298" decoding="async" className="mt-auto w-full max-w-[282px] self-center lg:absolute lg:bottom-6 lg:left-1/2 lg:mt-0 lg:h-[140px] lg:-translate-x-1/2" />
+      </div>
+      <div className="relative flex flex-col gap-5 overflow-hidden rounded-3xl bg-[#FFF4EB] p-6 lg:h-[320px] lg:p-6">
+        <div>
+          <h3 className="text-xl leading-8 font-semibold text-[#080302] lg:text-2xl">Referral Rewards</h3>
+          <p className="mt-3 text-base leading-7 text-[#666] lg:text-lg">Invite users to the platform and earn additional rewards through referrals.</p>
+        </div>
+        <img src="assets/8ebe083a9d0b.webp" alt="Referral stats" width="900" height="239" decoding="async" className="mt-auto w-full lg:absolute lg:right-6 lg:bottom-6 lg:left-6 lg:mt-0 lg:w-auto" />
+      </div>
+      <div className="relative flex flex-col gap-5 overflow-hidden rounded-3xl bg-[#FFF4EB] p-6 sm:col-span-2 lg:col-span-3 lg:h-[320px] lg:flex-row lg:items-center lg:gap-10 lg:p-6">
+        <div className="lg:max-w-[387px] lg:shrink-0">
+          <h3 className="text-xl leading-8 font-semibold text-[#080302] lg:text-2xl">Submission Verification</h3>
+          <p className="mt-3 text-base leading-7 text-[#666] lg:text-lg">Review task submissions and maintain quality through structured approvals.</p>
+        </div>
+        <img src="assets/11f83b6fd314.webp" alt="Task details with submissions" width="1400" height="933" decoding="async" className="mt-auto w-full rounded-2xl lg:absolute lg:top-6 lg:right-6 lg:bottom-auto lg:mt-0 lg:h-[468px] lg:w-[701px] lg:object-cover" />
+      </div>
+    </div>
+  </div>
+</section>
+<section class="px-4 py-16 sm:px-8 lg:px-20 lg:py-24"><div class="mx-auto max-w-7xl"><h2 class="text-[32px] leading-[40px] font-semibold text-[#010310] lg:text-[48px] lg:leading-[56px]">Built for Real<br> Engagement</h2> <div class="mt-10 grid grid-cols-1 gap-5 sm:grid-cols-2 lg:mt-16 lg:gap-6"><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-8 lg:p-10"><span class="text-[36px] leading-[44px] font-semibold text-[#FF7300]">01.</span> <div class="flex flex-col gap-3"><h3 class="text-lg leading-7 font-semibold text-[#080302] lg:text-xl lg:leading-8">Reach Active Users</h3> <p class="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Connect your campaigns with real users ready to complete engagement tasks.</p></div></div><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-8 lg:p-10"><span class="text-[36px] leading-[44px] font-semibold text-[#FF7300]">02.</span> <div class="flex flex-col gap-3"><h3 class="text-lg leading-7 font-semibold text-[#080302] lg:text-xl lg:leading-8">Simple Campaign Management</h3> <p class="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Launch, manage, pause, and monitor campaigns from a clean dashboard.</p></div></div><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-8 lg:p-10"><span class="text-[36px] leading-[44px] font-semibold text-[#FF7300]">03.</span> <div class="flex flex-col gap-3"><h3 class="text-lg leading-7 font-semibold text-[#080302] lg:text-xl lg:leading-8">Transparent Reward System</h3> <p class="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Users know exactly what they'll earn, while advertisers track where rewards go.</p></div></div><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-8 lg:p-10"><span class="text-[36px] leading-[44px] font-semibold text-[#FF7300]">04.</span> <div class="flex flex-col gap-3"><h3 class="text-lg leading-7 font-semibold text-[#080302] lg:text-xl lg:leading-8">Fast &amp; Structured Verification</h3> <p class="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">A smooth approval system keeps campaigns moving efficiently.</p></div></div></div></div></section>
+<section class="px-4 py-16 sm:px-8 lg:px-20 lg:py-24"><div class="mx-auto max-w-7xl"><div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-12"><h2 class="text-[32px] leading-[40px] font-semibold text-[#010310] lg:text-[48px] lg:leading-[56px]">Manage Everything<br class="hidden lg:block"> From One Dashboard</h2> <p class="max-w-[420px] text-base leading-6 text-[#666] lg:text-lg lg:leading-7">Track campaign performance, manage wallet activity, review submissions, and complete tasks
+ from a single platform.</p></div> <div class="mt-10 flex items-center justify-center overflow-hidden rounded-3xl bg-[#F3F3F3] p-4 sm:p-6 lg:mt-16 lg:p-16"><img src="assets/3276f24d85f6.webp" alt="Dashboard preview" width="1720" height="1147" decoding="async" class="h-auto w-full max-w-[860px] rounded-2xl shadow-[0px_8px_16px_-4px_rgba(16,24,40,0.08)] lg:shadow-[0px_32px_64px_-12px_rgba(16,24,40,0.14)]"></div></div></section>
+<section class="px-4 py-16 sm:px-8 lg:px-20 lg:py-24"><div class="mx-auto max-w-7xl"><div class="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between lg:gap-12"><h2 class="text-[32px] leading-[40px] font-semibold text-[#010310] lg:text-[48px] lg:leading-[56px]">Trusted by Advertisers<br class="hidden lg:block"> and Users</h2> <p class="max-w-[420px] text-base leading-6 text-[#666] lg:text-lg lg:leading-7">Launching campaigns and tracking participants feels incredibly smooth.</p></div> <div class="relative mt-10 lg:mt-16"><div class="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3 lg:gap-6"><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-6 lg:p-8 flex"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-7 text-[#080302]"><path fill="currentColor" d="M11 10H7a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h2v2a2 2 0 0 1-2 2H6v3h1c2.76 0 5-2.24 5-5v-9a3 3 0 0 0-1-3zm14 0h-4a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h2v2a2 2 0 0 1-2 2h-1v3h1c2.76 0 5-2.24 5-5v-9a3 3 0 0 0-1-3z"></path></svg> <p class="text-base leading-6 text-[#080302] lg:text-lg lg:leading-7">Launching campaigns and tracking participants feels incredibly smooth.</p> <div class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg></div></div><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-6 lg:p-8 hidden sm:flex"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-7 text-[#080302]"><path fill="currentColor" d="M11 10H7a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h2v2a2 2 0 0 1-2 2H6v3h1c2.76 0 5-2.24 5-5v-9a3 3 0 0 0-1-3zm14 0h-4a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h2v2a2 2 0 0 1-2 2h-1v3h1c2.76 0 5-2.24 5-5v-9a3 3 0 0 0-1-3z"></path></svg> <p class="text-base leading-6 text-[#080302] lg:text-lg lg:leading-7">I'm a student and FamsUpTasks has been helping with my daily needs</p> <div class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg></div></div><div class="flex flex-col gap-6 rounded-2xl bg-[#F3F3F3] p-6 lg:p-8 hidden lg:flex"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" class="size-7 text-[#080302]"><path fill="currentColor" d="M11 10H7a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h2v2a2 2 0 0 1-2 2H6v3h1c2.76 0 5-2.24 5-5v-9a3 3 0 0 0-1-3zm14 0h-4a3 3 0 0 0-3 3v4a3 3 0 0 0 3 3h2v2a2 2 0 0 1-2 2h-1v3h1c2.76 0 5-2.24 5-5v-9a3 3 0 0 0-1-3z"></path></svg> <p class="text-base leading-6 text-[#080302] lg:text-lg lg:leading-7">If you are looking for a way to earn your daily 2k I recommend FamsUpTasks</p> <div class="flex items-center gap-1"><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg><svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" class="size-5 text-[#FF7300]"><path fill="currentColor" d="m12 17.3-6.18 3.7 1.64-7.03L2 9.24l7.19-.62L12 2l2.81 6.62 7.19.62-5.46 4.73L18.18 21z"></path></svg></div></div></div> <button type="button" aria-label="Previous" class="absolute top-1/2 -left-2 hidden size-10 -translate-y-1/2 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-[#080302] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] transition-colors hover:bg-[#F3F3F3] sm:flex lg:-
+<section class="px-4 py-16 sm:px-8 lg:px-20 lg:py-24">
+  <div class="mx-auto max-w-3xl">
+    <h2 class="text-center text-[32px] leading-[40px] font-semibold text-[#010310] lg:text-[48px] lg:leading-[56px]">Frequently Asked<br> Questions</h2>
+    <div class="mt-12 flex flex-col gap-3 lg:mt-16">
+      <div class="overflow-hidden rounded-2xl bg-[#F3F3F3]">
+        <button type="button" aria-expanded="true" class="flex w-full items-start justify-between gap-4 px-5 py-5 text-left lg:px-7 lg:py-6">
+          <div class="flex flex-1 flex-col gap-3">
+            <span class="text-base leading-6 font-semibold text-[#080302] lg:text-lg lg:leading-7">How do campaigns work?</span>
+            <p class="text-sm leading-5 text-[#666] lg:text-base lg:leading-6">Advertisers create tasks with rewards for users who complete specific online activities.</p>
+          </div>
+          <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-[#080302] transition-transform rotate-45">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="size-3">
+              <path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div class="overflow-hidden rounded-2xl bg-[#F3F3F3]">
+        <button type="button" aria-expanded="false" class="flex w-full items-start justify-between gap-4 px-5 py-5 text-left lg:px-7 lg:py-6">
+          <div class="flex flex-1 flex-col gap-3">
+            <span class="text-base leading-6 font-semibold text-[#080302] lg:text-lg lg:leading-7">How do users earn rewards?</span>
+          </div>
+          <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-[#080302] transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="size-3">
+              <path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div class="overflow-hidden rounded-2xl bg-[#F3F3F3]">
+        <button type="button" aria-expanded="false" class="flex w-full items-start justify-between gap-4 px-5 py-5 text-left lg:px-7 lg:py-6">
+          <div class="flex flex-1 flex-col gap-3">
+            <span class="text-base leading-6 font-semibold text-[#080302] lg:text-lg lg:leading-7">How are rewards paid?</span>
+          </div>
+          <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-[#080302] transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="size-3">
+              <path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div class="overflow-hidden rounded-2xl bg-[#F3F3F3]">
+        <button type="button" aria-expanded="false" class="flex w-full items-start justify-between gap-4 px-5 py-5 text-left lg:px-7 lg:py-6">
+          <div class="flex flex-1 flex-col gap-3">
+            <span class="text-base leading-6 font-semibold text-[#080302] lg:text-lg lg:leading-7">Can I create my own campaigns?</span>
+          </div>
+          <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-[#080302] transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="size-3">
+              <path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+      <div class="overflow-hidden rounded-2xl bg-[#F3F3F3]">
+        <button type="button" aria-expanded="false" class="flex w-full items-start justify-between gap-4 px-5 py-5 text-left lg:px-7 lg:py-6">
+          <div class="flex flex-1 flex-col gap-3">
+            <span class="text-base leading-6 font-semibold text-[#080302] lg:text-lg lg:leading-7">How are task submissions verified?</span>
+          </div>
+          <span class="mt-0.5 flex size-6 shrink-0 items-center justify-center rounded-full border border-[#D0D5DD] bg-white text-[#080302] transition-transform">
+            <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" class="size-3">
+              <path d="M10 4v12M4 10h12" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round"></path>
+            </svg>
+          </span>
+        </button>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="px-4 pt-12 pb-16 sm:px-8 lg:px-20 lg:pt-20 lg:pb-24">
+  <div class="mx-auto max-w-7xl">
+    <div class="relative">
+      <div class="relative overflow-hidden rounded-[40px] bg-[#FF7300] px-6 py-10 text-white lg:rounded-[60px] lg:px-16 lg:py-20">
+        <img src="assets/0a776f401e63.svg" alt="" aria-hidden="true" class="pointer-events-none absolute -top-[271px] right-0 hidden h-[868px] w-[804px] mix-blend-overlay lg:block">
+        <div class="relative flex flex-col gap-8 lg:max-w-[442px] lg:gap-10">
+          <div class="flex flex-col gap-5">
+            <h2 class="text-[32px] leading-[40px] font-semibold tracking-[-0.02em] lg:text-[48px] lg:leading-[60px]">Ready to Reach More People?</h2>
+            <p class="text-base leading-6 lg:text-xl lg:leading-[30px]">Create campaigns, grow engagement, and connect with real users through task-based
+ interactions.</p>
+          </div>
+          <button type="button" class="flex w-full items-center justify-center rounded-xl border border-[#D0D5DD] bg-white px-[18px] py-3 text-base leading-6 font-semibold text-[#080302] shadow-[0px_1px_2px_0px_rgba(16,24,40,0.05)] transition-colors hover:bg-[#F3F3F3] sm:w-fit sm:py-2.5">Launch a Campaign</button>
+          <img src="assets/25f1593b2e91.webp" width="634" height="976" decoding="async" alt="FamsupTasks wallet on mobile" class="mx-auto h-[420px] w-auto sm:hidden">
+        </div>
+      </div>
+      <img src="assets/25f1593b2e91.webp" width="634" height="976" decoding="async" alt="" aria-hidden="true" class="pointer-events-none absolute hidden h-[360px] w-auto sm:-top-[72px] sm:right-8 sm:block sm:h-[420px] lg:-top-[88px] lg:right-[72px] lg:h-[488px]">
+    </div>
+  </div>
+</section>
+<footer class="px-4 pb-10 sm:px-8 lg:px-20">
+  <div class="mx-auto flex max-w-7xl flex-col items-center gap-4 rounded-3xl bg-[#F3F3F3] px-6 py-10 text-center">
+    <div class="relative h-10 w-[164px] overflow-hidden">
+      <img src="assets/e050137dcb0b.png" alt="FamsUp" class="absolute max-w-none" style="height:543.48%;width:131.23%;left:-15.49%;top:-221.74%;">
+    </div>
+    <p class="max-w-[520px] text-sm leading-5 text-[#666] lg:text-base lg:leading-6">FamsupTasks helps advertisers grow through task-based engagement while giving users
+ rewarding ways to participate online.</p>
+    <p class="text-xs leading-[18px] text-[#666]">Copyright reserved, 2025</p>
+  </div>
+</footer>
+    </>
+  )
+}
