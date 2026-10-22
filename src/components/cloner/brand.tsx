@@ -1,7 +1,7 @@
 /**
  * Clonethat brand assets — the "code bracket C" mark and the
- * JetBrains-Mono wordmark (accent = teal-400 / #2dd4bf, the neon-mint
- * from the logo spec).
+ * JetBrains-Mono wordmark (accent = emerald-400 / #34d399, the original
+ * neon-green accent).
  */
 
 export function BrandMark({ className }: { className?: string }) {
@@ -39,7 +39,7 @@ export function BrandMark({ className }: { className?: string }) {
 export function Wordmark({ className }: { className?: string }) {
   return (
     <span className={`font-brand font-bold tracking-tight ${className ?? ''}`}>
-      clone<span className="text-teal-400">{'{that}'}</span>
+      clone<span className="text-emerald-400">{'{that}'}</span>
     </span>
   )
 }

@@ -229,7 +229,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
       <div className="mb-4 flex flex-col gap-3 sm:flex-row sm:items-center sm:justify-between">
         <div className="min-w-0">
           <div className="flex flex-wrap items-center gap-2">
-            <Badge className="border border-teal-500/30 bg-teal-500/15 text-teal-300 hover:bg-teal-500/15">
+            <Badge className="border border-emerald-500/30 bg-emerald-500/15 text-emerald-300 hover:bg-emerald-500/15">
               <Check className="mr-1 h-3 w-3" aria-hidden /> Clone ready
             </Badge>
             {meta.rendered && (
@@ -251,7 +251,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
             size="sm"
             onClick={downloadZip}
             disabled={zipLoading}
-            className="gap-1.5 bg-teal-500 font-semibold text-zinc-950 hover:bg-teal-400"
+            className="gap-1.5 bg-emerald-500 font-semibold text-zinc-950 hover:bg-emerald-400"
           >
             {zipLoading ? <Loader2 className="h-3.5 w-3.5 animate-spin" aria-hidden /> : <FileArchive className="h-3.5 w-3.5" aria-hidden />}
             Mirror ZIP
@@ -271,7 +271,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
             onClick={copyHtml}
             className="gap-1.5 border-zinc-700 bg-zinc-900 text-zinc-200 hover:bg-zinc-800 hover:text-zinc-100"
           >
-            {copied ? <Check className="h-3.5 w-3.5 text-teal-400" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
+            {copied ? <Check className="h-3.5 w-3.5 text-emerald-400" aria-hidden /> : <Copy className="h-3.5 w-3.5" aria-hidden />}
             Copy HTML
           </Button>
           <Button
@@ -336,7 +336,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                   onClick={() => setActiveSlug(p.slug)}
                   className={`flex items-center gap-1.5 rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
                     activeSlug === p.slug
-                      ? 'border-teal-500/50 bg-teal-500/15 text-teal-300'
+                      ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-300'
                       : 'border-zinc-800 bg-zinc-900/60 text-zinc-400 hover:border-zinc-700 hover:text-zinc-200'
                   }`}
                 >
@@ -353,16 +353,16 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
 
           <Tabs defaultValue="preview" onValueChange={(v) => v === 'code' && loadCode()}>
             <TabsList className="mb-3 grid w-full max-w-[480px] grid-cols-4 border border-zinc-800 bg-zinc-900">
-              <TabsTrigger value="preview" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-teal-300">
+              <TabsTrigger value="preview" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
                 <Monitor className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="hidden sm:inline">Preview</span>
               </TabsTrigger>
-              <TabsTrigger value="compare" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-teal-300">
+              <TabsTrigger value="compare" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
                 <SplitSquareHorizontal className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="hidden sm:inline">Compare</span>
               </TabsTrigger>
-              <TabsTrigger value="code" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-teal-300">
+              <TabsTrigger value="code" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
                 <Code2 className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="hidden sm:inline">Code</span>
               </TabsTrigger>
-              <TabsTrigger value="rebuild" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-teal-300">
+              <TabsTrigger value="rebuild" className="gap-1 px-1 text-[10px] sm:text-xs data-[state=active]:bg-zinc-800 data-[state=active]:text-emerald-300">
                 <Sparkles className="h-3.5 w-3.5 shrink-0" aria-hidden /> <span className="sm:hidden">AI</span> <span className="hidden sm:inline">AI Rebuild</span>
               </TabsTrigger>
             </TabsList>
@@ -385,7 +385,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                         aria-pressed={device === d}
                         className={`rounded-md p-2 transition-colors ${
                           device === d
-                            ? 'bg-teal-500/15 text-teal-300'
+                            ? 'bg-emerald-500/15 text-emerald-300'
                             : 'text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300'
                         }`}
                       >
@@ -437,7 +437,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                     href={shotUrl}
                     target="_blank"
                     rel="noreferrer"
-                    className="text-[11px] text-teal-400 hover:text-teal-300"
+                    className="text-[11px] text-emerald-400 hover:text-emerald-300"
                   >
                     Open original ↗
                   </a>
@@ -499,8 +499,8 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                 {rebuildLoading && (
                   <div className="flex h-[62vh] min-h-[440px] flex-col items-center justify-center gap-4 bg-zinc-950">
                     <div className="relative">
-                      <Sparkles className="h-10 w-10 animate-pulse text-teal-400" aria-hidden />
-                      <span className="absolute -inset-4 animate-ping rounded-full border border-teal-500/20" aria-hidden />
+                      <Sparkles className="h-10 w-10 animate-pulse text-emerald-400" aria-hidden />
+                      <span className="absolute -inset-4 animate-ping rounded-full border border-emerald-500/20" aria-hidden />
                     </div>
                     <p className="text-sm font-medium text-zinc-200">{REBUILD_STEPS[rebuildStep]}</p>
                     <p className="max-w-sm text-center text-xs text-zinc-500">
@@ -513,7 +513,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                   <div className="flex h-[62vh] min-h-[440px] flex-col items-center justify-center gap-4 bg-zinc-950 p-6">
                     <AlertTriangle className="h-8 w-8 text-amber-400" aria-hidden />
                     <p className="max-w-md text-center text-sm text-zinc-300">{rebuildError}</p>
-                    <Button size="sm" onClick={ensureRebuild} className="gap-1.5 bg-teal-500 font-semibold text-zinc-950 hover:bg-teal-400">
+                    <Button size="sm" onClick={ensureRebuild} className="gap-1.5 bg-emerald-500 font-semibold text-zinc-950 hover:bg-emerald-400">
                       <RefreshCw className="h-3.5 w-3.5" aria-hidden /> Retry rebuild
                     </Button>
                   </div>
@@ -537,7 +537,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                             onClick={() => setRebuildView(v)}
                             className={`rounded-md px-2.5 py-1.5 text-xs font-medium transition-colors ${
                               rebuildView === v
-                                ? 'bg-teal-500/15 text-teal-300'
+                                ? 'bg-emerald-500/15 text-emerald-300'
                                 : 'text-zinc-500 hover:bg-zinc-800 hover:text-zinc-300'
                             }`}
                           >
@@ -578,7 +578,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                     )}
 
                     {rebuildView === 'html' && (
-                      <pre className="cloner-scroll max-h-[62vh] min-h-[440px] overflow-auto bg-zinc-950 p-4 font-mono text-[11px] leading-relaxed text-teal-200/80">
+                      <pre className="cloner-scroll max-h-[62vh] min-h-[440px] overflow-auto bg-zinc-950 p-4 font-mono text-[11px] leading-relaxed text-emerald-200/80">
                         <code>{rebuild.code}</code>
                       </pre>
                     )}
@@ -590,7 +590,7 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
                     )}
 
                     <div className="flex items-center gap-2 border-t border-zinc-800 bg-zinc-900/60 px-4 py-2">
-                      <Sparkles className="h-3 w-3 text-teal-500" aria-hidden />
+                      <Sparkles className="h-3 w-3 text-emerald-500" aria-hidden />
                       <p className="text-[11px] text-zinc-500">
                         Generated by AI from the captured DOM — clean Tailwind utilities, semantic tags, no trackers. Review before production use.
                       </p>
@@ -600,12 +600,12 @@ export function Workspace({ result, onNewClone }: WorkspaceProps) {
 
                 {!rebuildLoading && !rebuildError && !rebuild && (
                   <div className="flex h-[62vh] min-h-[440px] flex-col items-center justify-center gap-4 bg-zinc-950 p-6">
-                    <Sparkles className="h-8 w-8 text-teal-400" aria-hidden />
+                    <Sparkles className="h-8 w-8 text-emerald-400" aria-hidden />
                     <p className="text-sm font-medium text-zinc-200">Rebuild this page with AI</p>
                     <p className="max-w-md text-center text-xs text-zinc-500">
                       The engine will convert the captured DOM into clean, hand-readable HTML with Tailwind CSS — plus a React component — instead of the raw site dump.
                     </p>
-                    <Button size="sm" onClick={ensureRebuild} className="gap-1.5 bg-teal-500 font-semibold text-zinc-950 hover:bg-teal-400">
+                    <Button size="sm" onClick={ensureRebuild} className="gap-1.5 bg-emerald-500 font-semibold text-zinc-950 hover:bg-emerald-400">
                       <Sparkles className="h-3.5 w-3.5" aria-hidden /> Rebuild with AI
                     </Button>
                     <details className="w-full max-w-md rounded-lg border border-zinc-800 bg-zinc-900/60 px-3 py-2">

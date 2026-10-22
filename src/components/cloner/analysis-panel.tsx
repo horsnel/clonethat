@@ -12,7 +12,7 @@ import {
 } from 'lucide-react'
 
 const CATEGORY_STYLE: Record<StackItem['category'], string> = {
-  framework: 'text-teal-300 border-teal-500/40 bg-teal-500/10',
+  framework: 'text-emerald-300 border-emerald-500/40 bg-emerald-500/10',
   cms: 'text-amber-300 border-amber-500/40 bg-amber-500/10',
   builder: 'text-violet-300 border-violet-500/40 bg-violet-500/10',
   css: 'text-teal-300 border-teal-500/40 bg-teal-500/10',
@@ -55,7 +55,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
       <Card className="border-zinc-800/80 bg-zinc-900/60">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-sm font-semibold text-zinc-300">
-            <Layers className="h-4 w-4 text-teal-400" aria-hidden />
+            <Layers className="h-4 w-4 text-emerald-400" aria-hidden />
             Site profile
           </CardTitle>
         </CardHeader>
@@ -65,7 +65,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
             href={meta.finalUrl}
             target="_blank"
             rel="noreferrer"
-            className="block truncate font-mono text-xs text-teal-400/90 hover:text-teal-300 hover:underline"
+            className="block truncate font-mono text-xs text-emerald-400/90 hover:text-emerald-300 hover:underline"
           >
             {meta.finalUrl}
           </a>
@@ -87,7 +87,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
       <Card className="border-zinc-800/80 bg-zinc-900/60">
         <CardHeader className="pb-3">
           <CardTitle className="flex items-center gap-2 text-sm font-semibold text-zinc-300">
-            <Braces className="h-4 w-4 text-teal-400" aria-hidden />
+            <Braces className="h-4 w-4 text-emerald-400" aria-hidden />
             Tech stack
             <Badge variant="secondary" className="ml-auto bg-zinc-800 text-[10px] text-zinc-400">
               {analysis.stack.length}
@@ -117,7 +117,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
         <Card className="border-zinc-800/80 bg-zinc-900/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold text-zinc-300">
-              <Palette className="h-4 w-4 text-teal-400" aria-hidden />
+              <Palette className="h-4 w-4 text-emerald-400" aria-hidden />
               Color palette
               <span className="ml-auto text-[10px] font-normal text-zinc-600">click to copy</span>
             </CardTitle>
@@ -148,7 +148,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
         <Card className="border-zinc-800/80 bg-zinc-900/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold text-zinc-300">
-              <Type className="h-4 w-4 text-teal-400" aria-hidden />
+              <Type className="h-4 w-4 text-emerald-400" aria-hidden />
               Typography
             </CardTitle>
           </CardHeader>
@@ -165,7 +165,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
                   </div>
                   <div className="h-1 overflow-hidden rounded-full bg-zinc-800">
                     <div
-                      className="h-full rounded-full bg-teal-500/70"
+                      className="h-full rounded-full bg-emerald-500/70"
                       style={{ width: `${Math.max(8, (f.count / max) * 100)}%` }}
                     />
                   </div>
@@ -199,7 +199,7 @@ export function AnalysisPanel({ meta }: { meta: CloneMeta }) {
         <Card className="border-zinc-800/80 bg-zinc-900/60">
           <CardHeader className="pb-3">
             <CardTitle className="flex items-center gap-2 text-sm font-semibold text-zinc-300">
-              <FileType2 className="h-4 w-4 text-teal-400" aria-hidden />
+              <FileType2 className="h-4 w-4 text-emerald-400" aria-hidden />
               Assets
               <Badge variant="secondary" className="ml-auto bg-zinc-800 text-[10px] text-zinc-400">
                 {assets.length}

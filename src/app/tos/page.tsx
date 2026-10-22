@@ -61,7 +61,7 @@ export default function TosPage() {
       <header className="border-b border-zinc-800/80 bg-zinc-950">
         <div className="mx-auto flex h-14 w-full max-w-3xl items-center justify-between px-4">
           <Link href="/" className="flex items-center gap-2.5" aria-label="Clonethat home">
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-400 text-zinc-950">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-zinc-950">
               <BrandMark className="h-5 w-5" />
             </span>
             <Wordmark className="text-base" />
@@ -77,7 +77,7 @@ export default function TosPage() {
 
       <main className="mx-auto w-full max-w-3xl flex-1 px-4 py-12">
         <div className="mb-10 flex items-center gap-3">
-          <ShieldCheck className="h-8 w-8 text-teal-400" aria-hidden />
+          <ShieldCheck className="h-8 w-8 text-emerald-400" aria-hidden />
           <div>
             <h1 className="text-2xl font-bold tracking-tight">Terms of Service</h1>
             <p className="mt-1 text-sm text-zinc-500">

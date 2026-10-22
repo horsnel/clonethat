@@ -152,7 +152,7 @@ export default function Home() {
             className="flex items-center gap-2.5"
             aria-label="Clonethat home"
           >
-            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-teal-400 text-zinc-950">
+            <span className="flex h-8 w-8 items-center justify-center rounded-lg bg-emerald-500 text-zinc-950">
               <BrandMark className="h-5 w-5" />
             </span>
             <Wordmark className="text-base" />
@@ -161,7 +161,7 @@ export default function Home() {
             </span>
           </button>
           <div className="flex items-center gap-1.5 text-xs text-zinc-500">
-            <ShieldCheck className="h-3.5 w-3.5 text-teal-500" aria-hidden />
+            <ShieldCheck className="h-3.5 w-3.5 text-emerald-500" aria-hidden />
             <span className="hidden sm:inline">Runs entirely on this server — nothing is uploaded anywhere</span>
             <span className="sm:hidden">Private</span>
           </div>
@@ -189,13 +189,13 @@ export default function Home() {
 
         {view.kind === 'cloning' && (
           <section className="mx-auto flex w-full max-w-md flex-col items-center px-4 py-24" aria-label="Cloning progress">
-            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-teal-500/30 bg-teal-500/10">
-              <Loader2 className="h-8 w-8 animate-spin text-teal-400" aria-hidden />
+            <div className="mb-8 flex h-16 w-16 items-center justify-center rounded-2xl border border-emerald-500/30 bg-emerald-500/10">
+              <Loader2 className="h-8 w-8 animate-spin text-emerald-400" aria-hidden />
             </div>
             <h2 className="text-lg font-semibold">Cloning {hostnameOf(lastUrl.current)}…</h2>
             <p className="mt-1 text-sm text-zinc-500">Browser rendering takes a little longer — usually 15–60s.</p>
             {progressMsg && (
-              <p className="mt-2 max-w-sm text-center font-mono text-[11px] text-teal-400/90" aria-live="polite">
+              <p className="mt-2 max-w-sm text-center font-mono text-[11px] text-emerald-400/90" aria-live="polite">
                 {progressMsg}
               </p>
             )}
@@ -207,9 +207,9 @@ export default function Home() {
                     <span
                       className={`flex h-6 w-6 shrink-0 items-center justify-center rounded-full border ${
                         state === 'done'
-                          ? 'border-teal-500/50 bg-teal-500/15 text-teal-400'
+                          ? 'border-emerald-500/50 bg-emerald-500/15 text-emerald-400'
                           : state === 'active'
-                            ? 'border-teal-500/50 bg-teal-500/10'
+                            ? 'border-emerald-500/50 bg-emerald-500/10'
                             : 'border-zinc-800 bg-zinc-900 text-zinc-700'
                       }`}
                     >
@@ -281,11 +281,11 @@ function HistoryStrip({
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.25, delay: i * 0.04 }}
               onClick={() => onOpen(c.id)}
-              className="group rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-left transition-colors hover:border-teal-500/40 hover:bg-zinc-900"
+              className="group rounded-xl border border-zinc-800/80 bg-zinc-900/50 p-4 text-left transition-colors hover:border-emerald-500/40 hover:bg-zinc-900"
             >
               <div className="flex items-center gap-1.5">
                 {c.rendered && (
-                  <span className="rounded border border-teal-500/40 bg-teal-500/10 px-1 py-0.5 text-[9px] font-medium text-teal-300">
+                  <span className="rounded border border-emerald-500/40 bg-emerald-500/10 px-1 py-0.5 text-[9px] font-medium text-emerald-300">
                     RENDERED
                   </span>
                 )}
@@ -295,7 +295,7 @@ function HistoryStrip({
                   </span>
                 )}
               </div>
-              <p className="mt-1.5 truncate text-sm font-medium text-zinc-200 group-hover:text-teal-300">{c.title}</p>
+              <p className="mt-1.5 truncate text-sm font-medium text-zinc-200 group-hover:text-emerald-300">{c.title}</p>
               <p className="mt-0.5 truncate font-mono text-[11px] text-zinc-500">{hostnameOf(c.finalUrl)}</p>
               <div className="mt-2.5 flex items-center gap-2 text-[10px] text-zinc-600">
                 <span>{formatBytes(c.totalBytes)}</span>
